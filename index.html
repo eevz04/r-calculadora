@@ -12,7 +12,6 @@
             box-sizing: border-box;
         }
 
-```
     body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -184,17 +183,17 @@
     }
 
     .result {
-        background: #f8f9fa;
-        padding: 10px;
-        border-radius: 6px;
-        font-family: monospace;
-        font-size: 10px;
-        line-height: 1.3;
-        white-space: pre-wrap;
-        max-height: 280px;
-        overflow-y: auto;
-        margin-bottom: 8px;
-    }
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    max-height: 280px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+}
 
     .alert {
         padding: 6px 10px;
@@ -223,8 +222,6 @@
         font-size: 0.65rem;
     }
 </style>
-```
-
 </head>
 <body>
     <div class="container">
@@ -233,7 +230,6 @@
             <p>Compacta para escritorio</p>
         </div>
 
-```
     <div class="status">
         <div class="status-box">
             <div class="status-label">Usado</div>
@@ -268,23 +264,37 @@
 
         <div class="form-grid">
             <div class="field">
-                <label>🔢 Lotes</label>
-                <input type="number" id="lotes" step="0.001">
+                <label>📈 Tipo</label>
+                <select id="tipo">
+                    <option value="LONG">LONG</option>
+                    <option value="SHORT">SHORT</option>
+                </select>
             </div>
             <div class="field">
-                <label>📈 Promedio</label>
-                <input type="number" id="promedio">
+                <label>🔢 Lotes</label>
+                <input type="number" id="lotes" step="0.001">
             </div>
         </div>
 
         <div class="form-grid">
             <div class="field">
+                <label>📈 Promedio</label>
+                <input type="number" id="promedio">
+            </div>
+            <div class="field">
                 <label>📊 Actual</label>
                 <input type="number" id="actual">
             </div>
+        </div>
+
+        <div class="form-grid">
             <div class="field">
                 <label>🛡️ Stop</label>
                 <input type="number" id="stop">
+            </div>
+            <div class="field">
+                <label></label>
+                <div></div>
             </div>
         </div>
 
@@ -362,12 +372,9 @@
     <!-- RESULT TAB -->
     <div id="result" class="tab-content">
         <div class="result" id="resultado">
-```
-
 💡 Setup data and calculate…
 </div>
 
-```
         <div class="actions">
             <button class="btn btn-primary" onclick="copiar()">📋 Copy</button>
             <button class="btn btn-warning" onclick="enviarTelegram()">📤 Bot</button>
@@ -438,7 +445,8 @@
         event.target.classList.add('active');
         
         if (valor === 'todo') {
-            document.getElementById('dinero_agregar').value = Math.max(riesgoDisponible, 0).toFixed(0);
+            // Restar $1 de seguridad
+            document.getElementById('dinero_agregar').value = Math.max(0, riesgoDisponible - 1).toFixed(0);
         } else {
             document.getElementById('dinero_agregar').value = valor;
         }
@@ -448,112 +456,91 @@
         limpiarPresets();
         event.target.classList.add('active');
         
-        var dinero = (riesgoDisponible * porcentaje / 100).toFixed(0);
+        // Restar $1 de seguridad para evitar errores de redondeo
+        var dinero = Math.max(0, (riesgoDisponible * porcentaje / 100) - 1).toFixed(0);
         document.getElementById('dinero_escalada').value = dinero;
     }
 
-    function calcularAgregar() {
-        var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
-        var lotesActuales = parseFloat(document.getElementById('lotes').value) || 0;
-        var promedioActual = parseFloat(document.getElementById('promedio').value) || 0;
-        var stop = parseFloat(document.getElementById('stop').value);
-        var precioEntrada = parseFloat(document.getElementById('precio_entrada').value);
-        var dinero = parseFloat(document.getElementById('dinero_agregar').value);
-
-        if (!stop || !precioEntrada || !dinero) {
-            alerta('danger', '❌ Complete fields');
-            return;
-        }
-
-        if (dinero > riesgoDisponible) {
-            alerta('danger', '❌ Only $' + riesgoDisponible.toFixed(0) + ' available');
-            return;
-        }
-
-        var distancia = Math.abs(precioEntrada - stop);
-        var lotesAgregar = dinero / distancia;
-        var lotesNuevos = lotesActuales + lotesAgregar;
-
-        var promedioNuevo;
-        if (lotesActuales > 0 && promedioActual > 0) {
-            promedioNuevo = ((lotesActuales * promedioActual) + (lotesAgregar * precioEntrada)) / lotesNuevos;
-        } else {
-            promedioNuevo = precioEntrada;
-        }
-
-        var resultado = '➕ ADD TO POSITION\n\n';
-        resultado += '🪙 ' + simbolo.toUpperCase() + '\n\n';
-        resultado += '📊 CURRENT:\n';
-        resultado += lotesActuales.toFixed(6) + ' lots @ $' + promedioActual.toFixed(2) + '\n\n';
-        resultado += '➕ ADDING:\n';
-        resultado += 'Price: $' + precioEntrada.toFixed(2) + '\n';
-        resultado += 'Money: $' + dinero.toFixed(0) + '\n';
-        resultado += 'Lots: ' + lotesAgregar.toFixed(6) + '\n\n';
-        resultado += '🎯 RESULT:\n';
-        resultado += 'Total: ' + lotesNuevos.toFixed(6) + ' lots\n';
-        resultado += 'Avg: $' + promedioNuevo.toFixed(2) + '\n';
-        resultado += 'Stop: $' + stop + '\n\n';
-        resultado += '✅ ORDER:\n';
-        resultado += 'BUY ' + lotesAgregar.toFixed(6) + ' @ $' + precioEntrada.toFixed(2);
-
-        document.getElementById('resultado').textContent = resultado;
-        showTab('result');
-        alerta('success', '✅ Calculated');
-    }
-
     function calcularEscalada() {
-        var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
-        var stop = parseFloat(document.getElementById('stop').value);
-        var desde = parseFloat(document.getElementById('desde').value);
-        var hasta = parseFloat(document.getElementById('hasta').value);
-        var numOrdenes = parseInt(document.getElementById('ordenes').value);
-        var dinero = parseFloat(document.getElementById('dinero_escalada').value);
+    var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
+    var stop = parseFloat(document.getElementById('stop').value);
+    var desde = parseFloat(document.getElementById('desde').value);
+    var hasta = parseFloat(document.getElementById('hasta').value);
+    var numOrdenes = parseInt(document.getElementById('ordenes').value);
+    var dinero = parseFloat(document.getElementById('dinero_escalada').value);
 
-        if (!stop || !desde || !hasta || !numOrdenes || !dinero) {
-            alerta('danger', '❌ Complete fields');
-            return;
-        }
+    var lotesActuales = parseFloat(document.getElementById('lotes').value) || 0;
+    var promedioActual = parseFloat(document.getElementById('promedio').value) || 0;
 
-        if (dinero > riesgoDisponible) {
-            alerta('danger', '❌ Only $' + riesgoDisponible.toFixed(0) + ' available');
-            return;
-        }
-
-        var promedioEscalada = (desde + hasta) / 2;
-        var distancia = Math.abs(promedioEscalada - stop);
-        var lotesTotales = dinero / distancia;
-        var lotesPorOrden = lotesTotales / numOrdenes;
-        var espaciado = Math.abs(hasta - desde) / (numOrdenes - 1);
-
-        var resultado = '🔄 NEW SCALE\n\n';
-        resultado += '🪙 ' + simbolo.toUpperCase() + '\n\n';
-        resultado += '📊 RANGE:\n';
-        resultado += '$' + desde + ' → $' + hasta + '\n';
-        resultado += 'Orders: ' + numOrdenes + '\n';
-        resultado += 'Money: $' + dinero.toFixed(0) + '\n\n';
-        resultado += '🧮 LOTS:\n';
-        resultado += 'Total: ' + lotesTotales.toFixed(6) + '\n';
-        resultado += 'Per order: ' + lotesPorOrden.toFixed(6) + '\n\n';
-        resultado += '🎯 DETAILS:\n';
-        resultado += 'Stop: $' + stop + '\n';
-        resultado += 'Spacing: $' + espaciado.toFixed(2) + '\n';
-        resultado += 'Remaining: $' + (riesgoDisponible - dinero).toFixed(0);
-
-        if (numOrdenes <= 8) {
-            resultado += '\n\n📋 ORDERS:\n';
-            for (var i = 0; i < numOrdenes; i++) {
-                var precio = desde > hasta ? desde - (espaciado * i) : desde + (espaciado * i);
-                resultado += (i+1) + '. $' + precio.toFixed(2) + ' → ' + lotesPorOrden.toFixed(6) + '\n';
-            }
-        }
-
-        document.getElementById('resultado').textContent = resultado;
-        showTab('result');
-        alerta('success', '✅ Calculated');
+    if (!stop || !desde || !hasta || !numOrdenes || !dinero) {
+        alerta('danger', '❌ Completa los campos');
+        return;
     }
+
+    if (dinero > riesgoDisponible) {
+        alerta('danger', '❌ Solo $' + riesgoDisponible.toFixed(0) + ' disponible');
+        return;
+    }
+
+    var promedioEscalada = (desde + hasta) / 2;
+    var distancia = Math.abs(promedioEscalada - stop);
+    var lotesEscalada = dinero / distancia;
+    var lotesPorOrden = lotesEscalada / numOrdenes;
+    var espaciado = Math.abs(hasta - desde) / (numOrdenes - 1);
+
+    var lotesTotalesFinal = lotesActuales + lotesEscalada;
+    var promedioFinal;
+    
+    if (lotesActuales > 0 && promedioActual > 0) {
+        var valorActual = lotesActuales * promedioActual;
+        var valorEscalada = lotesEscalada * promedioEscalada;
+        promedioFinal = (valorActual + valorEscalada) / lotesTotalesFinal;
+    } else {
+        promedioFinal = promedioEscalada;
+    }
+
+    var resultado = '🔄 NUEVA ESCALADA\n\n';
+    resultado += '🪙 ' + simbolo.toUpperCase() + '\n';
+    resultado += 'Tipo: ' + document.getElementById('tipo').value + '\n\n';
+    
+    if (lotesActuales > 0) {
+        resultado += '📊 POSICIÓN ACTUAL:\n';
+        resultado += lotesActuales.toFixed(6) + ' lotes @ $' + promedioActual.toFixed(2) + '\n\n';
+    }
+    
+    resultado += '🔄 ESCALADA:\n';
+    resultado += '$' + desde + ' → $' + hasta + '\n';
+    resultado += 'Órdenes: ' + numOrdenes + '\n';
+    resultado += 'Dinero: $' + dinero.toFixed(0) + '\n';
+    resultado += 'Lotes escalada: ' + lotesEscalada.toFixed(6) + '\n';
+    resultado += 'Por orden: ' + lotesPorOrden.toFixed(6) + '\n\n';
+    
+    resultado += '🎯 POSICIÓN FINAL:\n';
+    resultado += 'Total lotes: ' + lotesTotalesFinal.toFixed(6) + '\n';
+    resultado += '🔼 Promedio Final: $' + promedioFinal.toFixed(2) + '\n';
+    resultado += 'Stop: $' + stop + '\n\n';
+    
+    resultado += '📋 DETALLES:\n';
+    resultado += 'Promedio escalada: $' + promedioEscalada.toFixed(2) + '\n';
+    resultado += 'Espaciado: $' + espaciado.toFixed(2) + '\n';
+    resultado += 'Restante: $' + (riesgoDisponible - dinero).toFixed(0);
+
+    if (numOrdenes <= 8) {
+        resultado += '\n\n📋 ÓRDENES:\n';
+        for (var i = 0; i < numOrdenes; i++) {
+            var precio = desde > hasta ? desde - (espaciado * i) : desde + (espaciado * i);
+            resultado += (i+1) + '. $' + precio.toFixed(2) + ' → ' + lotesPorOrden.toFixed(6) + '\n';
+        }
+    }
+
+    document.getElementById('resultado').textContent = resultado;
+    showTab('result');
+    alerta('success', '✅ Calculado');
+}
 
     function calcularCombinado() {
         var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
+        var tipo = document.getElementById('tipo').value;
         var lotesActuales = parseFloat(document.getElementById('lotes').value) || 0;
         var promedioActual = parseFloat(document.getElementById('promedio').value) || 0;
         var stop = parseFloat(document.getElementById('stop').value);
@@ -582,96 +569,141 @@
         var totalLotes = lotesActuales;
         var valorTotal = lotesActuales * promedioActual;
 
-        var resultado = '🔥 COMBINED STRATEGY\n\n';
-        resultado += '🪙 ' + simbolo.toUpperCase() + '\n\n';
+        // Formato compatible con el bot
+        var resultado = '📊 NUEVA ORDEN CALCULADA\n\n';
+        resultado += '🔹 ' + simbolo.toLowerCase() + '\n\n';
+        resultado += 'Tipo: ' + tipo + '\n';
+        resultado += 'Riesgo: $' + riesgoTotal.toFixed(0) + '\n\n';
+        resultado += 'Entradas:\n';
 
+        // Entrada normal si existe
         if (tieneAdd) {
             var distanciaAdd = Math.abs(precioEntrada - stop);
             var lotesAdd = dineroAgregar / distanciaAdd;
+            var pctAdd = (dineroAgregar / riesgoTotal * 100);
             totalLotes += lotesAdd;
             totalDinero += dineroAgregar;
             valorTotal += lotesAdd * precioEntrada;
 
-            resultado += '➕ ADD: $' + precioEntrada.toFixed(2) + ' | $' + dineroAgregar.toFixed(0) + ' | ' + lotesAdd.toFixed(6) + ' lots\n';
+            resultado += '- ' + precioEntrada.toFixed(0) + ' (' + pctAdd.toFixed(0) + '%) → ' + lotesAdd.toFixed(6) + ' lotes\n';
         }
 
+        // Escalada si existe
         if (tieneScale) {
             var promedioScale = (desde + hasta) / 2;
             var distanciaScale = Math.abs(promedioScale - stop);
             var lotesScale = dineroEscalada / distanciaScale;
+            var pctScale = (dineroEscalada / riesgoTotal * 100);
             totalLotes += lotesScale;
             totalDinero += dineroEscalada;
             valorTotal += lotesScale * promedioScale;
 
-            resultado += '🔄 SCALE: $' + desde + '-$' + hasta + ' | ' + numOrdenes + ' orders | $' + dineroEscalada.toFixed(0) + '\n';
+            resultado += '- Escalonada (' + pctScale.toFixed(0) + '%): ' + desde.toFixed(0) + ' a ' + hasta.toFixed(0) + ' con ' + numOrdenes + ' órdenes → ' + lotesScale.toFixed(6) + ' lotes\n';
         }
 
         var promedioFinal = valorTotal / totalLotes;
-        var riesgoFinal = totalLotes * Math.abs(promedioFinal - stop);
+        var perdidaSL = Math.abs(stop - promedioFinal) * totalLotes;
 
-        resultado += '\n🎯 FINAL:\n';
-        resultado += 'Total lots: ' + totalLotes.toFixed(6) + '\n';
-        resultado += 'Avg price: $' + promedioFinal.toFixed(2) + '\n';
-        resultado += 'Total risk: $' + riesgoFinal.toFixed(2) + '\n';
-        resultado += 'Money used: $' + totalDinero.toFixed(0) + '\n';
-        resultado += 'Remaining: $' + (riesgoDisponible - totalDinero).toFixed(0);
+        resultado += '\nPrecio Promedio: ' + promedioFinal.toFixed(2) + '\n';
+        resultado += 'SL: ' + stop.toFixed(0) + ' (Pérdida: ' + perdidaSL.toFixed(2) + ')\n\n';
+        resultado += 'Lotes Totales: ' + totalLotes.toFixed(6) + '\n\n';
+
+        // Verificar si el riesgo está exacto
+        if (Math.abs(perdidaSL - totalDinero) < 1) {
+            resultado += '✅ RIESGO EXACTO';
+        } else {
+            var pctTotal = (totalDinero / riesgoTotal * 100);
+            resultado += '⚠️ PORCENTAJES: ' + pctTotal.toFixed(0) + '% (debe ser 100%)';
+        }
 
         document.getElementById('resultado').textContent = resultado;
         alerta('success', '✅ Combined calculated');
     }
 
     function parsearSenal() {
-        var input = document.getElementById('parse_input').value.toLowerCase();
-        if (!input.trim()) {
-            alerta('warning', '⚠️ Paste signal first');
-            return;
-        }
-
-        // Extraer símbolo
-        var simboloMatch = input.match(/^([a-z]{2,5})/i);
-        if (simboloMatch) {
-            document.getElementById('simbolo').value = simboloMatch[1].toUpperCase();
-        }
-
-        // Extraer riesgo
-        var riesgoMatch = input.match(/(\d+)\$?\s*riesgo/i) || input.match(/\$(\d+)/);
-        if (riesgoMatch) {
-            document.getElementById('riesgo').value = riesgoMatch[1];
-        }
-
-        // Extraer stop
-        var stopMatch = input.match(/(?:stop|sl)[:\s]*(\d+)/i);
-        if (stopMatch) {
-            document.getElementById('stop').value = stopMatch[1];
-        }
-
-        // Extraer entrada
-        var entradaMatch = input.match(/(?:entrada|entry)[:\s]*(\d+)\s*(\d+)%/i);
-        if (entradaMatch) {
-            document.getElementById('precio_entrada').value = entradaMatch[1];
-            var riesgo = parseFloat(document.getElementById('riesgo').value) || 100;
-            var dinero = (riesgo * parseInt(entradaMatch[2]) / 100).toFixed(0);
-            document.getElementById('dinero_agregar').value = dinero;
-        }
-
-        // Extraer escalada
-        var escaladaMatch = input.match(/(?:escalada|scale)[:\s]*(\d+)\s*a\s*(\d+)\s*con\s*(\d+)\s*ordenes?\s*(\d+)%/i);
-        if (escaladaMatch) {
-            document.getElementById('desde').value = escaladaMatch[1];
-            document.getElementById('hasta').value = escaladaMatch[2];
-            document.getElementById('ordenes').value = escaladaMatch[3];
-            var riesgo = parseFloat(document.getElementById('riesgo').value) || 100;
-            var dinero = (riesgo * parseInt(escaladaMatch[4]) / 100).toFixed(0);
-            document.getElementById('dinero_escalada').value = dinero;
-        }
-
-        if (document.getElementById('riesgo').value) {
-            actualizarStatus();
-        }
-
-        alerta('success', '✅ Signal loaded');
-        showTab('config');
+    var input = document.getElementById('parse_input').value.toLowerCase();
+    if (!input.trim()) {
+        alerta('warning', '⚠️ Pega la señal primero');
+        return;
     }
+
+    // Extraer símbolo
+    var simboloMatch = input.match(/^([a-z]{2,5})/i);
+    if (simboloMatch) {
+        document.getElementById('simbolo').value = simboloMatch[1].toUpperCase();
+    }
+
+    // Extraer riesgo - múltiples formatos
+    var riesgoMatch = input.match(/(?:riesgo|risk)[:\s]*\$?(\d+)/i) || 
+                     input.match(/\$(\d+)/);
+    if (riesgoMatch) {
+        document.getElementById('riesgo').value = riesgoMatch[1];
+    }
+
+    // Extraer stop - múltiples formatos
+    var stopMatch = input.match(/(?:stop|sl|stop\s*loss)[:\s]*\$?(\d+)/i);
+    if (stopMatch) {
+        document.getElementById('stop').value = stopMatch[1];
+    }
+
+    // Extraer tipo
+    var tipoMatch = input.match(/(long|short)/i);
+    if (tipoMatch) {
+        document.getElementById('tipo').value = tipoMatch[1].toUpperCase();
+    }
+
+    // Extraer precio promedio - múltiples formatos
+    var promedioMatch = input.match(/(?:precio\s*prom|precio\s*promedio|promedio)[:\s]*\$?(\d+)/i);
+    if (promedioMatch) {
+        document.getElementById('promedio').value = promedioMatch[1];
+    }
+
+    // Extraer actual
+    var actualMatch = input.match(/(?:actual)[:\s]*\$?(\d+)/i);
+    if (actualMatch) {
+        document.getElementById('actual').value = actualMatch[1];
+    }
+
+    // Extraer lotes
+    var lotesMatch = input.match(/(?:lotes)[:\s]*(\d+(?:\.\d+)?)/i);
+    if (lotesMatch) {
+        document.getElementById('lotes').value = lotesMatch[1];
+    }
+
+    // Extraer scale/escalada - formato: scale 108000-108500
+    var scaleMatch = input.match(/(?:scale|escalada|escalonada)[:\s]*(\d+)[-–](\d+)/i);
+    if (scaleMatch) {
+        document.getElementById('desde').value = scaleMatch[1];
+        document.getElementById('hasta').value = scaleMatch[2];
+    }
+
+    // Extraer entrada
+    var entradaMatch = input.match(/(?:entrada|entry)[:\s]*\$?(\d+)\s*(\d+)%/i);
+    if (entradaMatch) {
+        document.getElementById('precio_entrada').value = entradaMatch[1];
+        var riesgo = parseFloat(document.getElementById('riesgo').value) || 100;
+        var dinero = (riesgo * parseInt(entradaMatch[2]) / 100).toFixed(0);
+        document.getElementById('dinero_agregar').value = dinero;
+    }
+
+    // Extraer escalada completa - formato: escalada 59500 a 58500 con 20 ordenes 50%
+    var escaladaMatch = input.match(/(?:escalada|scale|escalonada)[:\s]*\$?(\d+)\s*a\s*\$?(\d+)\s*con\s*(\d+)\s*(?:ordenes?|orders?)\s*(\d+)%/i);
+    if (escaladaMatch) {
+        document.getElementById('desde').value = escaladaMatch[1];
+        document.getElementById('hasta').value = escaladaMatch[2];
+        document.getElementById('ordenes').value = escaladaMatch[3];
+        var riesgo = parseFloat(document.getElementById('riesgo').value) || 100;
+        var dinero = (riesgo * parseInt(escaladaMatch[4]) / 100).toFixed(0);
+        document.getElementById('dinero_escalada').value = dinero;
+    }
+
+    if (document.getElementById('riesgo').value) {
+        actualizarStatus();
+    }
+
+    alerta('success', '✅ Señal cargada');
+    showTab('config');
+}
 
     function copiar() {
         var texto = document.getElementById('resultado').textContent;
@@ -688,65 +720,201 @@
     }
 
     function enviarTelegram() {
-        var texto = document.getElementById('resultado').textContent;
-        if (texto.includes('Setup data')) {
-            alerta('warning', '⚠️ Calculate first');
-            return;
-        }
-
-        var botToken = "7582987755:AAFBdNQFZ4McMsJwt60gvTs9CW2XkKZ3OMA";
-        var chatId = "7471012566";
-        var url = 'https://api.telegram.org/bot' + botToken + '/sendMessage';
-
-        alerta('info', '📤 Sending...');
-
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: texto })
-        })
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            if (data.ok) {
-                alerta('success', '✅ Sent');
-            } else {
-                alerta('danger', '❌ Error');
-            }
-        })
-        .catch(function() {
-            alerta('danger', '❌ No connection');
-        });
+    var texto = document.getElementById('resultado').textContent;
+    if (texto.includes('Setup data')) {
+        alerta('warning', '⚠️ Calculate first');
+        return;
     }
 
-    function resetearTodo() {
-        var campos = ['simbolo', 'riesgo', 'lotes', 'promedio', 'actual', 'stop', 'precio_entrada', 'dinero_agregar', 'desde', 'hasta', 'ordenes', 'dinero_escalada'];
+    // Convertir al formato del bot
+    var textoBot = convertirFormatoBot(texto);
+    
+    var botToken = "7582987755:AAFBdNQFZ4McMsJwt60gvTs9CW2XkKZ3OMA";
+    var chatId = "7471012566";
+    var url = 'https://api.telegram.org/bot' + botToken + '/sendMessage';
+    
+    alerta('info', '📤 Enviando a Telegram...');
+    
+    fetch(url, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            chat_id: chatId, 
+            text: textoBot
+        })
+    })
+    .then(function(response) { 
+        return response.json(); 
+    })
+    .then(function(data) {
+        if (data.ok) {
+            alerta('success', '✅ Enviado a Telegram');
+        } else {
+            alerta('danger', '❌ Error: ' + (data.description || 'Error desconocido'));
+        }
+    })
+    .catch(function(error) {
+        alerta('danger', '❌ Error de conexión');
+        console.error('Error:', error);
+    });
+}
+
+function convertirFormatoBot(texto) {
+    var simbolo = document.getElementById('simbolo').value || 'crypto';
+    var tipo = document.getElementById('tipo').value;
+    var riesgo = riesgoTotal;
+    
+    // Resultado base - FORMATO EXACTO
+    var resultado = '📊 NUEVA ORDEN CALCULADA\n\n';
+    resultado += '🔹 ' + simbolo.toLowerCase() + '\n\n';
+    resultado += 'Tipo: ' + tipo + '\n';
+    resultado += 'Riesgo: $' + riesgo + '\n\n';
+    resultado += 'Entradas:\n';
+    
+    // Detectar tipo de cálculo
+    if (texto.includes('➕ AGREGAR A POSICIÓN')) {
+        // Entrada simple
+        var precioMatch = texto.match(/Precio: \$(\d+(?:\.\d+)?)/);
+        var dineroMatch = texto.match(/Dinero: \$(\d+)/);
+        var lotesMatch = texto.match(/Lotes: (\d+\.\d+)/);
         
-        for (var i = 0; i < campos.length; i++) {
-            var campo = document.getElementById(campos[i]);
-            if (campo) campo.value = '';
+        if (precioMatch && dineroMatch && lotesMatch) {
+            var precio = parseFloat(precioMatch[1]);
+            var dinero = parseFloat(dineroMatch[1]);
+            var lotes = parseFloat(lotesMatch[1]);
+            var pct = (dinero / riesgo * 100);
+            
+            resultado += '- ' + precio + ' (' + pct.toFixed(0) + '%) → ' + lotes.toFixed(6) + ' lotes\n';
         }
-
-        var parseInput = document.getElementById('parse_input');
-        if (parseInput) parseInput.value = '';
-
-        limpiarPresets();
-        riesgoTotal = 0;
-        riesgoUsado = 0;
-        riesgoDisponible = 0;
-
-        document.getElementById('usado').textContent = '$0';
-        document.getElementById('disponible').textContent = '$0';
-        document.getElementById('resultado').textContent = '💡 Setup data and calculate...';
-        document.getElementById('alertas').innerHTML = '';
-
-        alerta('success', '✅ Reset complete');
+        
+    } else if (texto.includes('🔄 NUEVA ESCALADA')) {
+        // Escalada
+        var rangoMatch = texto.match(/\$(\d+) → \$(\d+)/);
+        var ordenesMatch = texto.match(/Órdenes: (\d+)/);
+        var dineroMatch = texto.match(/Dinero: \$(\d+)/);
+        var scaleLotesMatch = texto.match(/Lotes escalada: (\d+\.\d+)/);
+        
+        if (rangoMatch && ordenesMatch && dineroMatch && scaleLotesMatch) {
+            var desde = parseFloat(rangoMatch[1]);
+            var hasta = parseFloat(rangoMatch[2]);
+            var ordenes = parseInt(ordenesMatch[1]);
+            var dinero = parseFloat(dineroMatch[1]);
+            var scaleLotes = parseFloat(scaleLotesMatch[1]);
+            var pct = (dinero / riesgo * 100);
+            
+            resultado += '- Escalonada (' + pct.toFixed(0) + '%): ' + desde + ' a ' + hasta + ' con ' + ordenes + ' órdenes → ' + scaleLotes.toFixed(6) + ' lotes\n';
+        }
+        
+    } else if (texto.includes('📊 NUEVA ORDEN CALCULADA')) {
+        // Combinado - extraer entradas del texto original
+        var entradasMatch = texto.match(/Entradas:\n([\s\S]*?)\n\nPrecio Promedio/);
+        if (entradasMatch) {
+            resultado += entradasMatch[1] + '\n';
+        }
     }
+    
+    // Extraer datos finales
+    var promedioMatch = texto.match(/(?:🔼 Promedio|🔼 Promedio Final|Precio Promedio): \$?(\d+(?:\.\d+)?)/);
+    var stopMatch = texto.match(/Stop: \$?(\d+)/);
+    var totalLotesMatch = texto.match(/(?:Total|Total lotes|Lotes Totales): (\d+\.\d+)/);
+    
+    var promedio = promedioMatch ? parseFloat(promedioMatch[1]) : 0;
+    var stop = stopMatch ? parseFloat(stopMatch[1]) : 0;
+    var totalLotes = totalLotesMatch ? parseFloat(totalLotesMatch[1]) : 0;
+    
+    var perdida = Math.abs(stop - promedio) * totalLotes;
+    
+    // FORMATO EXACTO COMO TU CALCULADORA QUE FUNCIONA - SIN TP AUTOMÁTICO
+    resultado += '\nPrecio Promedio: ' + promedio.toFixed(2) + '\n';
+    resultado += 'SL: ' + stop + ' (Pérdida: ' + perdida.toFixed(2) + ')\n\n';
+    resultado += 'Lotes Totales: ' + totalLotes.toFixed(6) + '\n\n';
+    resultado += '✅ RIESGO EXACTO';
+    
+    return resultado;
+}
+
+function resetearTodo() {
+    var campos = ['simbolo', 'riesgo', 'lotes', 'promedio', 'actual', 'stop', 'precio_entrada', 'dinero_agregar', 'desde', 'hasta', 'ordenes', 'dinero_escalada'];
+    
+    for (var i = 0; i < campos.length; i++) {
+        var campo = document.getElementById(campos[i]);
+        if (campo) campo.value = '';
+    }
+
+    document.getElementById('tipo').value = 'LONG';
+    var parseInput = document.getElementById('parse_input');
+    if (parseInput) parseInput.value = '';
+
+    limpiarPresets();
+    riesgoTotal = 0;
+    riesgoUsado = 0;
+    riesgoDisponible = 0;
+
+    document.getElementById('usado').textContent = '$0';
+    document.getElementById('disponible').textContent = '$0';
+    document.getElementById('resultado').textContent = '💡 Configura datos y calcula...';
+    document.getElementById('alertas').innerHTML = '';
+
+    alerta('success', '✅ Reset completo');
+}
 
     function limpiarPresets() {
         var presets = document.querySelectorAll('.preset');
         for (var i = 0; i < presets.length; i++) {
             presets[i].classList.remove('active');
         }
+    }
+
+    function calcularAgregar() {
+        var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
+        var lotesActuales = parseFloat(document.getElementById('lotes').value) || 0;
+        var promedioActual = parseFloat(document.getElementById('promedio').value) || 0;
+        var stop = parseFloat(document.getElementById('stop').value);
+        var precioEntrada = parseFloat(document.getElementById('precio_entrada').value);
+        var dinero = parseFloat(document.getElementById('dinero_agregar').value);
+
+        if (!stop || !precioEntrada || !dinero) {
+            alerta('danger', '❌ Completa los campos');
+            return;
+        }
+
+        if (dinero > riesgoDisponible) {
+            alerta('danger', '❌ Solo $' + riesgoDisponible.toFixed(0) + ' disponible');
+            return;
+        }
+
+        var distancia = Math.abs(precioEntrada - stop);
+        var lotesAgregar = dinero / distancia;
+        var lotesNuevos = lotesActuales + lotesAgregar;
+
+        var promedioNuevo;
+        if (lotesActuales > 0 && promedioActual > 0) {
+            promedioNuevo = ((lotesActuales * promedioActual) + (lotesAgregar * precioEntrada)) / lotesNuevos;
+        } else {
+            promedioNuevo = precioEntrada;
+        }
+
+        var resultado = '➕ AGREGAR A POSICIÓN\n\n';
+        resultado += '🪙 ' + simbolo.toUpperCase() + '\n';
+        resultado += 'Tipo: ' + document.getElementById('tipo').value + '\n\n';
+        resultado += '📊 ACTUAL:\n';
+        resultado += lotesActuales.toFixed(6) + ' lotes @ $' + promedioActual.toFixed(2) + '\n\n';
+        resultado += '➕ AGREGAR:\n';
+        resultado += 'Precio: $' + precioEntrada.toFixed(2) + '\n';
+        resultado += 'Dinero: $' + dinero.toFixed(0) + '\n';
+        resultado += 'Lotes: ' + lotesAgregar.toFixed(6) + '\n\n';
+        resultado += '🎯 RESULTADO:\n';
+        resultado += 'Total: ' + lotesNuevos.toFixed(6) + ' lotes\n';
+        resultado += '🔼 Promedio: $' + promedioNuevo.toFixed(2) + '\n';
+        resultado += 'Stop: $' + stop + '\n\n';
+        resultado += '✅ ORDEN:\n';
+        resultado += 'COMPRAR ' + lotesAgregar.toFixed(6) + ' @ $' + precioEntrada.toFixed(2);
+
+        document.getElementById('resultado').textContent = resultado;
+        showTab('result');
+        alerta('success', '✅ Calculado');
     }
 
     function alerta(tipo, mensaje) {
@@ -776,7 +944,5 @@
         }
     });
 </script>
-```
-
 </body>
 </html>
