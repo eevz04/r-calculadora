@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔄 Trading Calculator - Compact</title>
+    <title>🔄 Trading Calculator - Optimized</title>
     <style>
         * {
             margin: 0;
@@ -12,937 +11,1092 @@
             box-sizing: border-box;
         }
 
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 15px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: flex-start;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+        }
 
-    .container {
-        width: 350px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        overflow: hidden;
-        position: sticky;
-        top: 15px;
-    }
+        .container {
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: sticky;
+            top: 15px;
+        }
 
-    .header {
-        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-        color: white;
-        padding: 15px 20px;
-        text-align: center;
-    }
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
 
-    .header h1 {
-        font-size: 1.2rem;
-        margin-bottom: 3px;
-    }
+        .header h1 {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+        }
 
-    .status {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        padding: 12px;
-        background: #f8f9fa;
-    }
+        .status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 12px;
+            background: #f8f9fa;
+        }
 
-    .status-box {
-        text-align: center;
-        padding: 8px;
-        background: white;
-        border-radius: 6px;
-        font-size: 0.8rem;
-    }
+        .status-box {
+            text-align: center;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
 
-    .status-label {
-        color: #666;
-        font-weight: 600;
-        font-size: 0.65rem;
-    }
+        .status-label {
+            color: #666;
+            font-weight: 600;
+            font-size: 0.65rem;
+        }
 
-    .status-value {
-        font-weight: 700;
-        color: #333;
-        margin-top: 2px;
-        font-size: 0.9rem;
-    }
+        .status-value {
+            font-weight: 700;
+            color: #333;
+            margin-top: 2px;
+            font-size: 0.9rem;
+        }
 
-    .tabs {
-        display: flex;
-        background: #f8f9fa;
-    }
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+        }
 
-    .tab {
-        flex: 1;
-        padding: 10px 4px;
-        text-align: center;
-        background: #e9ecef;
-        border: none;
-        cursor: pointer;
-        font-size: 0.65rem;
-        font-weight: 600;
-        transition: all 0.3s;
-    }
+        .tab {
+            flex: 1;
+            padding: 10px 4px;
+            text-align: center;
+            background: #e9ecef;
+            border: none;
+            cursor: pointer;
+            font-size: 0.65rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
 
-    .tab.active {
-        background: white;
-        color: #4ECDC4;
-    }
+        .tab.active {
+            background: white;
+            color: #4ECDC4;
+        }
 
-    .tab-content {
-        display: none;
-        padding: 12px;
-        min-height: 350px;
-        max-height: 400px;
-        overflow-y: auto;
-    }
+        .tab-content {
+            display: none;
+            padding: 12px;
+            min-height: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
 
-    .tab-content.active {
-        display: block;
-    }
+        .tab-content.active {
+            display: block;
+        }
 
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        margin-bottom: 10px;
-    }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
 
-    .field {
-        display: flex;
-        flex-direction: column;
-    }
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .field label {
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 4px;
-    }
+        .field label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 4px;
+        }
 
-    .field input, .field textarea {
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 13px;
-    }
+        .field input, .field textarea, .field select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
 
-    .field input:focus, .field textarea:focus {
-        outline: none;
-        border-color: #4ECDC4;
-    }
+        .field input:focus, .field textarea:focus, .field select:focus {
+            outline: none;
+            border-color: #4ECDC4;
+        }
 
-    .presets {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 4px;
-        margin: 8px 0;
-    }
+        .presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            margin: 8px 0;
+        }
 
-    .preset {
-        padding: 5px 2px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background: white;
-        font-size: 0.65rem;
-        font-weight: 600;
-        cursor: pointer;
-        text-align: center;
-    }
+        .preset {
+            padding: 5px 2px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
 
-    .preset.active {
-        background: #4ECDC4;
-        color: white;
-        border-color: #4ECDC4;
-    }
+        .preset:hover {
+            background: #f8f9fa;
+        }
 
-    .btn {
-        width: 100%;
-        padding: 8px;
-        border: none;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        cursor: pointer;
-        margin-bottom: 6px;
-        transition: all 0.3s;
-    }
+        .preset.active {
+            background: #4ECDC4;
+            color: white;
+            border-color: #4ECDC4;
+        }
 
-    .btn-primary { background: #4ECDC4; color: white; }
-    .btn-warning { background: #ffc107; color: white; }
-    .btn-danger { background: #dc3545; color: white; }
+        .btn {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 6px;
+            transition: all 0.3s;
+        }
 
-    .btn:hover {
-        transform: translateY(-1px);
-    }
+        .btn-primary { background: #4ECDC4; color: white; }
+        .btn-warning { background: #ffc107; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
 
-    .result {
-    background: #f8f9fa;
-    padding: 10px;
-    border-radius: 6px;
-    font-family: monospace;
-    font-size: 12px;
-    line-height: 1.4;
-    white-space: pre-wrap;
-    max-height: 280px;
-    overflow-y: auto;
-    margin-bottom: 8px;
-}
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
 
-    .alert {
-        padding: 6px 10px;
-        margin: 6px 0;
-        border-radius: 4px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        text-align: center;
-    }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-    .alert-success { background: #d4edda; color: #155724; }
-    .alert-warning { background: #fff3cd; color: #856404; }
-    .alert-danger { background: #f8d7da; color: #721c24; }
-    .alert-info { background: #d1ecf1; color: #0c5460; }
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            max-height: 280px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+            border: 1px solid #e9ecef;
+        }
 
-    .actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 4px;
-        margin-top: 8px;
-    }
+        .alert {
+            padding: 6px 10px;
+            margin: 6px 0;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
 
-    .actions .btn {
-        margin-bottom: 0;
-        padding: 6px 2px;
-        font-size: 0.65rem;
-    }
-</style>
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .actions .btn {
+            margin-bottom: 0;
+            padding: 6px 2px;
+            font-size: 0.65rem;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #4ECDC4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 5px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🔄 Trading Calc</h1>
-            <p>Compacta para escritorio</p>
+            <p>Optimizado v2.0</p>
         </div>
 
-    <div class="status">
-        <div class="status-box">
-            <div class="status-label">Usado</div>
-            <div class="status-value" id="usado">$0</div>
-        </div>
-        <div class="status-box">
-            <div class="status-label">Disponible</div>
-            <div class="status-value" id="disponible">$0</div>
-        </div>
-    </div>
-
-    <div class="tabs">
-        <button class="tab active" onclick="showTab('config')">⚙️</button>
-        <button class="tab" onclick="showTab('add')">➕</button>
-        <button class="tab" onclick="showTab('scale')">🔄</button>
-        <button class="tab" onclick="showTab('parse')">📋</button>
-        <button class="tab" onclick="showTab('result')">📊</button>
-    </div>
-
-    <!-- CONFIG TAB -->
-    <div id="config" class="tab-content active">
-        <div class="form-grid">
-            <div class="field">
-                <label>🪙 Símbolo</label>
-                <input type="text" id="simbolo" placeholder="BTC, ETH...">
+        <div class="status">
+            <div class="status-box">
+                <div class="status-label">Usado</div>
+                <div class="status-value" id="usado">$0</div>
             </div>
-            <div class="field">
-                <label>💰 Riesgo Total</label>
-                <input type="number" id="riesgo">
+            <div class="status-box">
+                <div class="status-label">Disponible</div>
+                <div class="status-value" id="disponible">$0</div>
             </div>
         </div>
 
-        <div class="form-grid">
-            <div class="field">
-                <label>📈 Tipo</label>
-                <select id="tipo">
-                    <option value="LONG">LONG</option>
-                    <option value="SHORT">SHORT</option>
-                </select>
-            </div>
-            <div class="field">
-                <label>🔢 Lotes</label>
-                <input type="number" id="lotes" step="0.001">
-            </div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('config')">⚙️</button>
+            <button class="tab" onclick="showTab('add')">➕</button>
+            <button class="tab" onclick="showTab('scale')">🔄</button>
+            <button class="tab" onclick="showTab('parse')">📋</button>
+            <button class="tab" onclick="showTab('result')">📊</button>
         </div>
 
-        <div class="form-grid">
-            <div class="field">
-                <label>📈 Promedio</label>
-                <input type="number" id="promedio">
+        <!-- CONFIG TAB -->
+        <div id="config" class="tab-content active">
+            <div class="form-grid">
+                <div class="field">
+                    <label>🪙 Símbolo</label>
+                    <input type="text" id="simbolo" placeholder="BTC, ETH...">
+                </div>
+                <div class="field">
+                    <label>💰 Riesgo Total</label>
+                    <input type="number" id="riesgo" step="0.01">
+                </div>
             </div>
-            <div class="field">
-                <label>📊 Actual</label>
-                <input type="number" id="actual">
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>📈 Tipo</label>
+                    <select id="tipo">
+                        <option value="LONG">LONG</option>
+                        <option value="SHORT">SHORT</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>🔢 Lotes</label>
+                    <input type="number" id="lotes" step="0.001">
+                </div>
             </div>
-        </div>
 
-        <div class="form-grid">
-            <div class="field">
-                <label>🛡️ Stop</label>
-                <input type="number" id="stop">
+            <div class="form-grid">
+                <div class="field">
+                    <label>📈 Promedio</label>
+                    <input type="number" id="promedio" step="0.01">
+                </div>
+                <div class="field">
+                    <label>📊 Actual</label>
+                    <input type="number" id="actual" step="0.01">
+                </div>
             </div>
-            <div class="field">
-                <label></label>
-                <div></div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>🛡️ Stop</label>
+                    <input type="number" id="stop" step="0.01">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <div></div>
+                </div>
             </div>
-        </div>
 
-        <button class="btn btn-primary" onclick="actualizarStatus()">📊 Update</button>
-        <button class="btn btn-danger" onclick="resetearTodo()">🔄 Reset</button>
-    </div>
-
-    <!-- ADD TAB -->
-    <div id="add" class="tab-content">
-        <div class="form-grid">
-            <div class="field">
-                <label>📈 Precio</label>
-                <input type="number" id="precio_entrada">
-            </div>
-            <div class="field">
-                <label>💰 Dinero</label>
-                <input type="number" id="dinero_agregar">
-            </div>
-        </div>
-
-        <div class="presets">
-            <button class="preset" onclick="presetAgregar(10)">$10</button>
-            <button class="preset" onclick="presetAgregar(25)">$25</button>
-            <button class="preset" onclick="presetAgregar(50)">$50</button>
-            <button class="preset" onclick="presetAgregar('todo')">All</button>
-        </div>
-
-        <button class="btn btn-primary" onclick="calcularAgregar()">➕ Calc</button>
-    </div>
-
-    <!-- SCALE TAB -->
-    <div id="scale" class="tab-content">
-        <div class="form-grid">
-            <div class="field">
-                <label>📈 Desde</label>
-                <input type="number" id="desde">
-            </div>
-            <div class="field">
-                <label>📉 Hasta</label>
-                <input type="number" id="hasta">
-            </div>
-        </div>
-
-        <div class="form-grid">
-            <div class="field">
-                <label>🔢 Orders</label>
-                <input type="number" id="ordenes">
-            </div>
-            <div class="field">
-                <label>💰 Money</label>
-                <input type="number" id="dinero_escalada">
-            </div>
-        </div>
-
-        <div class="presets">
-            <button class="preset" onclick="presetEscalada(25)">25%</button>
-            <button class="preset" onclick="presetEscalada(50)">50%</button>
-            <button class="preset" onclick="presetEscalada(75)">75%</button>
-            <button class="preset" onclick="presetEscalada(100)">All</button>
-        </div>
-
-        <button class="btn btn-warning" onclick="calcularEscalada()">🧮 Calc</button>
-    </div>
-
-    <!-- PARSE TAB -->
-    <div id="parse" class="tab-content">
-        <div class="field">
-            <label>📋 Pegar señal</label>
-            <textarea id="parse_input" style="width:100%; height:80px; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:11px; resize:none;" placeholder="BTC entrada 61000 30% escalada 59500 a 58500 con 20 ordenes 50% stop 58000"></textarea>
-        </div>
-        
-        <button class="btn btn-primary" onclick="parsearSenal()">🔄 Cargar</button>
-    </div>
-
-    <!-- RESULT TAB -->
-    <div id="result" class="tab-content">
-        <div class="result" id="resultado">
-💡 Setup data and calculate…
-</div>
-
-        <div class="actions">
-            <button class="btn btn-primary" onclick="copiar()">📋 Copy</button>
-            <button class="btn btn-warning" onclick="enviarTelegram()">📤 Bot</button>
+            <button class="btn btn-primary" onclick="actualizarStatus()">📊 Update</button>
             <button class="btn btn-danger" onclick="resetearTodo()">🔄 Reset</button>
         </div>
-        
-        <button class="btn btn-primary" onclick="calcularCombinado()" style="margin-top:8px;">🔥 Combined</button>
+
+        <!-- ADD TAB -->
+        <div id="add" class="tab-content">
+            <div class="form-grid">
+                <div class="field">
+                    <label>📈 Precio</label>
+                    <input type="number" id="precio_entrada" step="0.01">
+                </div>
+                <div class="field">
+                    <label>💰 Dinero</label>
+                    <input type="number" id="dinero_agregar" step="0.01">
+                </div>
+            </div>
+
+            <div class="presets">
+                <button class="preset" onclick="presetAgregar(25)">25%</button>
+                <button class="preset" onclick="presetAgregar(50)">50%</button>
+                <button class="preset" onclick="presetAgregar(75)">75%</button>
+                <button class="preset" onclick="presetAgregar('todo')">All</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="calcularAgregar()">➕ Calc</button>
+        </div>
+
+        <!-- SCALE TAB -->
+        <div id="scale" class="tab-content">
+            <div class="form-grid">
+                <div class="field">
+                    <label>📈 Desde</label>
+                    <input type="number" id="desde" step="0.01">
+                </div>
+                <div class="field">
+                    <label>📉 Hasta</label>
+                    <input type="number" id="hasta" step="0.01">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>🔢 Orders</label>
+                    <input type="number" id="ordenes" min="2" max="20">
+                </div>
+                <div class="field">
+                    <label>💰 Money</label>
+                    <input type="number" id="dinero_escalada" step="0.01">
+                </div>
+            </div>
+
+            <div class="presets">
+                <button class="preset" onclick="presetEscalada(25)">25%</button>
+                <button class="preset" onclick="presetEscalada(50)">50%</button>
+                <button class="preset" onclick="presetEscalada(75)">75%</button>
+                <button class="preset" onclick="presetEscalada(100)">All</button>
+            </div>
+
+            <button class="btn btn-warning" onclick="calcularEscalada()">🧮 Calc</button>
+        </div>
+
+        <!-- PARSE TAB -->
+        <div id="parse" class="tab-content">
+            <div class="field">
+                <label>📋 Pegar señal</label>
+                <textarea id="parse_input" style="width:100%; height:80px; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:11px; resize:none;" placeholder="BTC entrada 61000 30% escalada 59500 a 58500 con 20 ordenes 50% stop 58000"></textarea>
+            </div>
+            
+            <button class="btn btn-primary" onclick="parsearSenal()">🔄 Cargar</button>
+        </div>
+
+        <!-- RESULT TAB -->
+        <div id="result" class="tab-content">
+            <div class="result" id="resultado">💡 Setup data and calculate…</div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="copiar()">📋 Copy</button>
+                <button class="btn btn-warning" onclick="enviarTelegram()" id="btnTelegram">📤 Bot</button>
+                <button class="btn btn-danger" onclick="resetearTodo()">🔄 Reset</button>
+            </div>
+            
+            <button class="btn btn-primary" onclick="calcularCombinado()" style="margin-top:8px;">🔥 Combined</button>
+        </div>
+
+        <div id="alertas"></div>
     </div>
 
-    <div id="alertas"></div>
-</div>
+    <script>
+        // Variables globales
+        let riesgoTotal = 0;
+        let riesgoUsado = 0;
+        let riesgoDisponible = 0;
+        window.formatoParaBot = null;
 
-<script>
-    var riesgoTotal = 0;
-    var riesgoUsado = 0;
-    var riesgoDisponible = 0;
-
-    function showTab(tabName) {
-        var contents = document.querySelectorAll('.tab-content');
-        for (var i = 0; i < contents.length; i++) {
-            contents[i].classList.remove('active');
-        }
-        
-        var tabs = document.querySelectorAll('.tab');
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove('active');
-        }
-        
-        document.getElementById(tabName).classList.add('active');
-        event.target.classList.add('active');
-    }
-
-    function actualizarStatus() {
-        var riesgo = parseFloat(document.getElementById('riesgo').value) || 0;
-        var lotes = parseFloat(document.getElementById('lotes').value) || 0;
-        var promedio = parseFloat(document.getElementById('promedio').value) || 0;
-        var stop = parseFloat(document.getElementById('stop').value) || 0;
-
-        if (riesgo <= 0) {
-            alerta('warning', '⚠️ Set total risk');
-            return;
+        // Utilidades
+        function formatNumber(num, decimales = 2) {
+            if (isNaN(num)) return "0";
+            return parseFloat(num).toFixed(decimales);
         }
 
-        riesgoTotal = riesgo;
-
-        if (lotes > 0 && promedio > 0 && stop > 0) {
-            riesgoUsado = lotes * Math.abs(promedio - stop);
-        } else {
-            riesgoUsado = 0;
+        function validateNumber(value, min = 0) {
+            const num = parseFloat(value);
+            return !isNaN(num) && num >= min ? num : null;
         }
 
-        riesgoDisponible = riesgoTotal - riesgoUsado;
-
-        document.getElementById('usado').textContent = '$' + riesgoUsado.toFixed(0);
-        document.getElementById('disponible').textContent = '$' + riesgoDisponible.toFixed(0);
-
-        if (riesgoDisponible < 0) {
-            alerta('danger', '🚨 Risk exceeded');
-        } else if (riesgoDisponible === 0) {
-            alerta('warning', '⚠️ No risk available');
-        } else {
-            alerta('success', '✅ $' + riesgoDisponible.toFixed(0) + ' available');
-        }
-    }
-
-    function presetAgregar(valor) {
-        limpiarPresets();
-        event.target.classList.add('active');
-        
-        if (valor === 'todo') {
-            // Restar $1 de seguridad
-            document.getElementById('dinero_agregar').value = Math.max(0, riesgoDisponible - 1).toFixed(0);
-        } else {
-            document.getElementById('dinero_agregar').value = valor;
-        }
-    }
-
-    function presetEscalada(porcentaje) {
-        limpiarPresets();
-        event.target.classList.add('active');
-        
-        // Restar $1 de seguridad para evitar errores de redondeo
-        var dinero = Math.max(0, (riesgoDisponible * porcentaje / 100) - 1).toFixed(0);
-        document.getElementById('dinero_escalada').value = dinero;
-    }
-
-    function calcularEscalada() {
-    var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
-    var stop = parseFloat(document.getElementById('stop').value);
-    var desde = parseFloat(document.getElementById('desde').value);
-    var hasta = parseFloat(document.getElementById('hasta').value);
-    var numOrdenes = parseInt(document.getElementById('ordenes').value);
-    var dinero = parseFloat(document.getElementById('dinero_escalada').value);
-
-    var lotesActuales = parseFloat(document.getElementById('lotes').value) || 0;
-    var promedioActual = parseFloat(document.getElementById('promedio').value) || 0;
-
-    if (!stop || !desde || !hasta || !numOrdenes || !dinero) {
-        alerta('danger', '❌ Completa los campos');
-        return;
-    }
-
-    if (dinero > riesgoDisponible) {
-        alerta('danger', '❌ Solo $' + riesgoDisponible.toFixed(0) + ' disponible');
-        return;
-    }
-
-    var promedioEscalada = (desde + hasta) / 2;
-    var distancia = Math.abs(promedioEscalada - stop);
-    var lotesEscalada = dinero / distancia;
-    var lotesPorOrden = lotesEscalada / numOrdenes;
-    var espaciado = Math.abs(hasta - desde) / (numOrdenes - 1);
-
-    var lotesTotalesFinal = lotesActuales + lotesEscalada;
-    var promedioFinal;
-    
-    if (lotesActuales > 0 && promedioActual > 0) {
-        var valorActual = lotesActuales * promedioActual;
-        var valorEscalada = lotesEscalada * promedioEscalada;
-        promedioFinal = (valorActual + valorEscalada) / lotesTotalesFinal;
-    } else {
-        promedioFinal = promedioEscalada;
-    }
-
-    var resultado = '🔄 NUEVA ESCALADA\n\n';
-    resultado += '🪙 ' + simbolo.toUpperCase() + '\n';
-    resultado += 'Tipo: ' + document.getElementById('tipo').value + '\n\n';
-    
-    if (lotesActuales > 0) {
-        resultado += '📊 POSICIÓN ACTUAL:\n';
-        resultado += lotesActuales.toFixed(6) + ' lotes @ $' + promedioActual.toFixed(2) + '\n\n';
-    }
-    
-    resultado += '🔄 ESCALADA:\n';
-    resultado += '$' + desde + ' → $' + hasta + '\n';
-    resultado += 'Órdenes: ' + numOrdenes + '\n';
-    resultado += 'Dinero: $' + dinero.toFixed(0) + '\n';
-    resultado += 'Lotes escalada: ' + lotesEscalada.toFixed(6) + '\n';
-    resultado += 'Por orden: ' + lotesPorOrden.toFixed(6) + '\n\n';
-    
-    resultado += '🎯 POSICIÓN FINAL:\n';
-    resultado += 'Total lotes: ' + lotesTotalesFinal.toFixed(6) + '\n';
-    resultado += '🔼 Promedio Final: $' + promedioFinal.toFixed(2) + '\n';
-    resultado += 'Stop: $' + stop + '\n\n';
-    
-    resultado += '📋 DETALLES:\n';
-    resultado += 'Promedio escalada: $' + promedioEscalada.toFixed(2) + '\n';
-    resultado += 'Espaciado: $' + espaciado.toFixed(2) + '\n';
-    resultado += 'Restante: $' + (riesgoDisponible - dinero).toFixed(0);
-
-    if (numOrdenes <= 8) {
-        resultado += '\n\n📋 ÓRDENES:\n';
-        for (var i = 0; i < numOrdenes; i++) {
-            var precio = desde > hasta ? desde - (espaciado * i) : desde + (espaciado * i);
-            resultado += (i+1) + '. $' + precio.toFixed(2) + ' → ' + lotesPorOrden.toFixed(6) + '\n';
-        }
-    }
-
-    document.getElementById('resultado').textContent = resultado;
-    showTab('result');
-    alerta('success', '✅ Calculado');
-}
-
-    function calcularCombinado() {
-        var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
-        var tipo = document.getElementById('tipo').value;
-        var lotesActuales = parseFloat(document.getElementById('lotes').value) || 0;
-        var promedioActual = parseFloat(document.getElementById('promedio').value) || 0;
-        var stop = parseFloat(document.getElementById('stop').value);
-
-        if (!stop) {
-            alerta('danger', '❌ Set stop loss first');
-            return;
-        }
-
-        var precioEntrada = parseFloat(document.getElementById('precio_entrada').value);
-        var dineroAgregar = parseFloat(document.getElementById('dinero_agregar').value);
-        var desde = parseFloat(document.getElementById('desde').value);
-        var hasta = parseFloat(document.getElementById('hasta').value);
-        var numOrdenes = parseInt(document.getElementById('ordenes').value);
-        var dineroEscalada = parseFloat(document.getElementById('dinero_escalada').value);
-
-        var tieneAdd = precioEntrada && dineroAgregar;
-        var tieneScale = desde && hasta && numOrdenes && dineroEscalada;
-
-        if (!tieneAdd && !tieneScale) {
-            alerta('warning', '⚠️ Set add or scale data');
-            return;
-        }
-
-        var totalDinero = 0;
-        var totalLotes = lotesActuales;
-        var valorTotal = lotesActuales * promedioActual;
-
-        // Formato compatible con el bot
-        var resultado = '📊 NUEVA ORDEN CALCULADA\n\n';
-        resultado += '🔹 ' + simbolo.toLowerCase() + '\n\n';
-        resultado += 'Tipo: ' + tipo + '\n';
-        resultado += 'Riesgo: $' + riesgoTotal.toFixed(0) + '\n\n';
-        resultado += 'Entradas:\n';
-
-        // Entrada normal si existe
-        if (tieneAdd) {
-            var distanciaAdd = Math.abs(precioEntrada - stop);
-            var lotesAdd = dineroAgregar / distanciaAdd;
-            var pctAdd = (dineroAgregar / riesgoTotal * 100);
-            totalLotes += lotesAdd;
-            totalDinero += dineroAgregar;
-            valorTotal += lotesAdd * precioEntrada;
-
-            resultado += '- ' + precioEntrada.toFixed(0) + ' (' + pctAdd.toFixed(0) + '%) → ' + lotesAdd.toFixed(6) + ' lotes\n';
-        }
-
-        // Escalada si existe
-        if (tieneScale) {
-            var promedioScale = (desde + hasta) / 2;
-            var distanciaScale = Math.abs(promedioScale - stop);
-            var lotesScale = dineroEscalada / distanciaScale;
-            var pctScale = (dineroEscalada / riesgoTotal * 100);
-            totalLotes += lotesScale;
-            totalDinero += dineroEscalada;
-            valorTotal += lotesScale * promedioScale;
-
-            resultado += '- Escalonada (' + pctScale.toFixed(0) + '%): ' + desde.toFixed(0) + ' a ' + hasta.toFixed(0) + ' con ' + numOrdenes + ' órdenes → ' + lotesScale.toFixed(6) + ' lotes\n';
-        }
-
-        var promedioFinal = valorTotal / totalLotes;
-        var perdidaSL = Math.abs(stop - promedioFinal) * totalLotes;
-
-        resultado += '\nPrecio Promedio: ' + promedioFinal.toFixed(2) + '\n';
-        resultado += 'SL: ' + stop.toFixed(0) + ' (Pérdida: ' + perdidaSL.toFixed(2) + ')\n\n';
-        resultado += 'Lotes Totales: ' + totalLotes.toFixed(6) + '\n\n';
-
-        // Verificar si el riesgo está exacto
-        if (Math.abs(perdidaSL - totalDinero) < 1) {
-            resultado += '✅ RIESGO EXACTO';
-        } else {
-            var pctTotal = (totalDinero / riesgoTotal * 100);
-            resultado += '⚠️ PORCENTAJES: ' + pctTotal.toFixed(0) + '% (debe ser 100%)';
-        }
-
-        document.getElementById('resultado').textContent = resultado;
-        alerta('success', '✅ Combined calculated');
-    }
-
-    function parsearSenal() {
-    var input = document.getElementById('parse_input').value.toLowerCase();
-    if (!input.trim()) {
-        alerta('warning', '⚠️ Pega la señal primero');
-        return;
-    }
-
-    // Extraer símbolo
-    var simboloMatch = input.match(/^([a-z]{2,5})/i);
-    if (simboloMatch) {
-        document.getElementById('simbolo').value = simboloMatch[1].toUpperCase();
-    }
-
-    // Extraer riesgo - múltiples formatos
-    var riesgoMatch = input.match(/(?:riesgo|risk)[:\s]*\$?(\d+)/i) || 
-                     input.match(/\$(\d+)/);
-    if (riesgoMatch) {
-        document.getElementById('riesgo').value = riesgoMatch[1];
-    }
-
-    // Extraer stop - múltiples formatos
-    var stopMatch = input.match(/(?:stop|sl|stop\s*loss)[:\s]*\$?(\d+)/i);
-    if (stopMatch) {
-        document.getElementById('stop').value = stopMatch[1];
-    }
-
-    // Extraer tipo
-    var tipoMatch = input.match(/(long|short)/i);
-    if (tipoMatch) {
-        document.getElementById('tipo').value = tipoMatch[1].toUpperCase();
-    }
-
-    // Extraer precio promedio - múltiples formatos
-    var promedioMatch = input.match(/(?:precio\s*prom|precio\s*promedio|promedio)[:\s]*\$?(\d+)/i);
-    if (promedioMatch) {
-        document.getElementById('promedio').value = promedioMatch[1];
-    }
-
-    // Extraer actual
-    var actualMatch = input.match(/(?:actual)[:\s]*\$?(\d+)/i);
-    if (actualMatch) {
-        document.getElementById('actual').value = actualMatch[1];
-    }
-
-    // Extraer lotes
-    var lotesMatch = input.match(/(?:lotes)[:\s]*(\d+(?:\.\d+)?)/i);
-    if (lotesMatch) {
-        document.getElementById('lotes').value = lotesMatch[1];
-    }
-
-    // Extraer scale/escalada - formato: scale 108000-108500
-    var scaleMatch = input.match(/(?:scale|escalada|escalonada)[:\s]*(\d+)[-–](\d+)/i);
-    if (scaleMatch) {
-        document.getElementById('desde').value = scaleMatch[1];
-        document.getElementById('hasta').value = scaleMatch[2];
-    }
-
-    // Extraer entrada
-    var entradaMatch = input.match(/(?:entrada|entry)[:\s]*\$?(\d+)\s*(\d+)%/i);
-    if (entradaMatch) {
-        document.getElementById('precio_entrada').value = entradaMatch[1];
-        var riesgo = parseFloat(document.getElementById('riesgo').value) || 100;
-        var dinero = (riesgo * parseInt(entradaMatch[2]) / 100).toFixed(0);
-        document.getElementById('dinero_agregar').value = dinero;
-    }
-
-    // Extraer escalada completa - formato: escalada 59500 a 58500 con 20 ordenes 50%
-    var escaladaMatch = input.match(/(?:escalada|scale|escalonada)[:\s]*\$?(\d+)\s*a\s*\$?(\d+)\s*con\s*(\d+)\s*(?:ordenes?|orders?)\s*(\d+)%/i);
-    if (escaladaMatch) {
-        document.getElementById('desde').value = escaladaMatch[1];
-        document.getElementById('hasta').value = escaladaMatch[2];
-        document.getElementById('ordenes').value = escaladaMatch[3];
-        var riesgo = parseFloat(document.getElementById('riesgo').value) || 100;
-        var dinero = (riesgo * parseInt(escaladaMatch[4]) / 100).toFixed(0);
-        document.getElementById('dinero_escalada').value = dinero;
-    }
-
-    if (document.getElementById('riesgo').value) {
-        actualizarStatus();
-    }
-
-    alerta('success', '✅ Señal cargada');
-    showTab('config');
-}
-
-    function copiar() {
-        var texto = document.getElementById('resultado').textContent;
-        if (texto.includes('Setup data')) {
-            alerta('warning', '⚠️ Calculate first');
-            return;
-        }
-        
-        navigator.clipboard.writeText(texto).then(function() {
-            alerta('success', '✅ Copied');
-        }).catch(function() {
-            alerta('danger', '❌ Copy error');
-        });
-    }
-
-    function enviarTelegram() {
-    var texto = document.getElementById('resultado').textContent;
-    if (texto.includes('Setup data')) {
-        alerta('warning', '⚠️ Calculate first');
-        return;
-    }
-
-    // Convertir al formato del bot
-    var textoBot = convertirFormatoBot(texto);
-    
-    var botToken = "7582987755:AAFBdNQFZ4McMsJwt60gvTs9CW2XkKZ3OMA";
-    var chatId = "7471012566";
-    var url = 'https://api.telegram.org/bot' + botToken + '/sendMessage';
-    
-    alerta('info', '📤 Enviando a Telegram...');
-    
-    fetch(url, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-            chat_id: chatId, 
-            text: textoBot
-        })
-    })
-    .then(function(response) { 
-        return response.json(); 
-    })
-    .then(function(data) {
-        if (data.ok) {
-            alerta('success', '✅ Enviado a Telegram');
-        } else {
-            alerta('danger', '❌ Error: ' + (data.description || 'Error desconocido'));
-        }
-    })
-    .catch(function(error) {
-        alerta('danger', '❌ Error de conexión');
-        console.error('Error:', error);
-    });
-}
-
-function convertirFormatoBot(texto) {
-    var simbolo = document.getElementById('simbolo').value || 'crypto';
-    var tipo = document.getElementById('tipo').value;
-    var riesgo = riesgoTotal;
-    
-    // Resultado base - FORMATO EXACTO
-    var resultado = '📊 NUEVA ORDEN CALCULADA\n\n';
-    resultado += '🔹 ' + simbolo.toLowerCase() + '\n\n';
-    resultado += 'Tipo: ' + tipo + '\n';
-    resultado += 'Riesgo: $' + riesgo + '\n\n';
-    resultado += 'Entradas:\n';
-    
-    // Detectar tipo de cálculo
-    if (texto.includes('➕ AGREGAR A POSICIÓN')) {
-        // Entrada simple
-        var precioMatch = texto.match(/Precio: \$(\d+(?:\.\d+)?)/);
-        var dineroMatch = texto.match(/Dinero: \$(\d+)/);
-        var lotesMatch = texto.match(/Lotes: (\d+\.\d+)/);
-        
-        if (precioMatch && dineroMatch && lotesMatch) {
-            var precio = parseFloat(precioMatch[1]);
-            var dinero = parseFloat(dineroMatch[1]);
-            var lotes = parseFloat(lotesMatch[1]);
-            var pct = (dinero / riesgo * 100);
+        // Navegación de tabs
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
             
-            resultado += '- ' + precio + ' (' + pct.toFixed(0) + '%) → ' + lotes.toFixed(6) + ' lotes\n';
-        }
-        
-    } else if (texto.includes('🔄 NUEVA ESCALADA')) {
-        // Escalada
-        var rangoMatch = texto.match(/\$(\d+) → \$(\d+)/);
-        var ordenesMatch = texto.match(/Órdenes: (\d+)/);
-        var dineroMatch = texto.match(/Dinero: \$(\d+)/);
-        var scaleLotesMatch = texto.match(/Lotes escalada: (\d+\.\d+)/);
-        
-        if (rangoMatch && ordenesMatch && dineroMatch && scaleLotesMatch) {
-            var desde = parseFloat(rangoMatch[1]);
-            var hasta = parseFloat(rangoMatch[2]);
-            var ordenes = parseInt(ordenesMatch[1]);
-            var dinero = parseFloat(dineroMatch[1]);
-            var scaleLotes = parseFloat(scaleLotesMatch[1]);
-            var pct = (dinero / riesgo * 100);
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-            resultado += '- Escalonada (' + pct.toFixed(0) + '%): ' + desde + ' a ' + hasta + ' con ' + ordenes + ' órdenes → ' + scaleLotes.toFixed(6) + ' lotes\n';
-        }
-        
-    } else if (texto.includes('📊 NUEVA ORDEN CALCULADA')) {
-        // Combinado - extraer entradas del texto original
-        var entradasMatch = texto.match(/Entradas:\n([\s\S]*?)\n\nPrecio Promedio/);
-        if (entradasMatch) {
-            resultado += entradasMatch[1] + '\n';
-        }
-    }
-    
-    // Extraer datos finales
-    var promedioMatch = texto.match(/(?:🔼 Promedio|🔼 Promedio Final|Precio Promedio): \$?(\d+(?:\.\d+)?)/);
-    var stopMatch = texto.match(/Stop: \$?(\d+)/);
-    var totalLotesMatch = texto.match(/(?:Total|Total lotes|Lotes Totales): (\d+\.\d+)/);
-    
-    var promedio = promedioMatch ? parseFloat(promedioMatch[1]) : 0;
-    var stop = stopMatch ? parseFloat(stopMatch[1]) : 0;
-    var totalLotes = totalLotesMatch ? parseFloat(totalLotesMatch[1]) : 0;
-    
-    var perdida = Math.abs(stop - promedio) * totalLotes;
-    
-    // FORMATO EXACTO COMO TU CALCULADORA QUE FUNCIONA - SIN TP AUTOMÁTICO
-    resultado += '\nPrecio Promedio: ' + promedio.toFixed(2) + '\n';
-    resultado += 'SL: ' + stop + ' (Pérdida: ' + perdida.toFixed(2) + ')\n\n';
-    resultado += 'Lotes Totales: ' + totalLotes.toFixed(6) + '\n\n';
-    resultado += '✅ RIESGO EXACTO';
-    
-    return resultado;
-}
-
-function resetearTodo() {
-    var campos = ['simbolo', 'riesgo', 'lotes', 'promedio', 'actual', 'stop', 'precio_entrada', 'dinero_agregar', 'desde', 'hasta', 'ordenes', 'dinero_escalada'];
-    
-    for (var i = 0; i < campos.length; i++) {
-        var campo = document.getElementById(campos[i]);
-        if (campo) campo.value = '';
-    }
-
-    document.getElementById('tipo').value = 'LONG';
-    var parseInput = document.getElementById('parse_input');
-    if (parseInput) parseInput.value = '';
-
-    limpiarPresets();
-    riesgoTotal = 0;
-    riesgoUsado = 0;
-    riesgoDisponible = 0;
-
-    document.getElementById('usado').textContent = '$0';
-    document.getElementById('disponible').textContent = '$0';
-    document.getElementById('resultado').textContent = '💡 Configura datos y calcula...';
-    document.getElementById('alertas').innerHTML = '';
-
-    alerta('success', '✅ Reset completo');
-}
-
-    function limpiarPresets() {
-        var presets = document.querySelectorAll('.preset');
-        for (var i = 0; i < presets.length; i++) {
-            presets[i].classList.remove('active');
-        }
-    }
-
-    function calcularAgregar() {
-        var simbolo = document.getElementById('simbolo').value || 'CRYPTO';
-        var lotesActuales = parseFloat(document.getElementById('lotes').value) || 0;
-        var promedioActual = parseFloat(document.getElementById('promedio').value) || 0;
-        var stop = parseFloat(document.getElementById('stop').value);
-        var precioEntrada = parseFloat(document.getElementById('precio_entrada').value);
-        var dinero = parseFloat(document.getElementById('dinero_agregar').value);
-
-        if (!stop || !precioEntrada || !dinero) {
-            alerta('danger', '❌ Completa los campos');
-            return;
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        if (dinero > riesgoDisponible) {
-            alerta('danger', '❌ Solo $' + riesgoDisponible.toFixed(0) + ' disponible');
-            return;
-        }
+        // Actualizar status de riesgo
+        function actualizarStatus() {
+            const riesgo = validateNumber(document.getElementById('riesgo').value);
+            const lotes = validateNumber(document.getElementById('lotes').value);
+            const promedio = validateNumber(document.getElementById('promedio').value);
+            const stop = validateNumber(document.getElementById('stop').value);
 
-        var distancia = Math.abs(precioEntrada - stop);
-        var lotesAgregar = dinero / distancia;
-        var lotesNuevos = lotesActuales + lotesAgregar;
+            if (!riesgo || riesgo <= 0) {
+                alerta('warning', '⚠️ Set total risk');
+                return;
+            }
 
-        var promedioNuevo;
-        if (lotesActuales > 0 && promedioActual > 0) {
-            promedioNuevo = ((lotesActuales * promedioActual) + (lotesAgregar * precioEntrada)) / lotesNuevos;
-        } else {
-            promedioNuevo = precioEntrada;
-        }
+            riesgoTotal = riesgo;
 
-        var resultado = '➕ AGREGAR A POSICIÓN\n\n';
-        resultado += '🪙 ' + simbolo.toUpperCase() + '\n';
-        resultado += 'Tipo: ' + document.getElementById('tipo').value + '\n\n';
-        resultado += '📊 ACTUAL:\n';
-        resultado += lotesActuales.toFixed(6) + ' lotes @ $' + promedioActual.toFixed(2) + '\n\n';
-        resultado += '➕ AGREGAR:\n';
-        resultado += 'Precio: $' + precioEntrada.toFixed(2) + '\n';
-        resultado += 'Dinero: $' + dinero.toFixed(0) + '\n';
-        resultado += 'Lotes: ' + lotesAgregar.toFixed(6) + '\n\n';
-        resultado += '🎯 RESULTADO:\n';
-        resultado += 'Total: ' + lotesNuevos.toFixed(6) + ' lotes\n';
-        resultado += '🔼 Promedio: $' + promedioNuevo.toFixed(2) + '\n';
-        resultado += 'Stop: $' + stop + '\n\n';
-        resultado += '✅ ORDEN:\n';
-        resultado += 'COMPRAR ' + lotesAgregar.toFixed(6) + ' @ $' + precioEntrada.toFixed(2);
+            if (lotes && promedio && stop) {
+                riesgoUsado = lotes * Math.abs(promedio - stop);
+            } else {
+                riesgoUsado = 0;
+            }
 
-        document.getElementById('resultado').textContent = resultado;
-        showTab('result');
-        alerta('success', '✅ Calculado');
-    }
+            riesgoDisponible = riesgoTotal - riesgoUsado;
 
-    function alerta(tipo, mensaje) {
-        document.getElementById('alertas').innerHTML = '<div class="alert alert-' + tipo + '">' + mensaje + '</div>';
-        setTimeout(function() {
-            document.getElementById('alertas').innerHTML = '';
-        }, 3000);
-    }
+            document.getElementById('usado').textContent = '$' + formatNumber(riesgoUsado, 0);
+            document.getElementById('disponible').textContent = '$' + formatNumber(riesgoDisponible, 0);
 
-    // Auto-update
-    document.addEventListener('DOMContentLoaded', function() {
-        var camposAuto = ['riesgo', 'lotes', 'promedio', 'stop'];
-        
-        for (var i = 0; i < camposAuto.length; i++) {
-            var campo = document.getElementById(camposAuto[i]);
-            if (campo) {
-                campo.addEventListener('input', function() {
-                    var self = this;
-                    clearTimeout(self.updateTimeout);
-                    self.updateTimeout = setTimeout(function() {
-                        actualizarStatus();
-                    }, 500);
-                });
-                
-                campo.addEventListener('blur', actualizarStatus);
+            if (riesgoDisponible < 0) {
+                alerta('danger', '🚨 Risk exceeded');
+            } else if (riesgoDisponible === 0) {
+                alerta('warning', '⚠️ No risk available');
+            } else {
+                alerta('success', '✅ $' + formatNumber(riesgoDisponible, 0) + ' available');
             }
         }
-    });
-</script>
+
+        // Presets para agregar dinero
+        function presetAgregar(valor) {
+            limpiarPresets();
+            event.target.classList.add('active');
+            
+            if (valor === 'todo') {
+                document.getElementById('dinero_agregar').value = formatNumber(Math.max(0, riesgoDisponible - 1), 0);
+            } else if (typeof valor === 'number') {
+                // Es un porcentaje
+                const dinero = Math.max(0, (riesgoDisponible * valor / 100) - 1);
+                document.getElementById('dinero_agregar').value = formatNumber(dinero, 0);
+            } else {
+                document.getElementById('dinero_agregar').value = valor;
+            }
+        }
+
+        // Presets para escalada
+        function presetEscalada(porcentaje) {
+            limpiarPresets();
+            event.target.classList.add('active');
+            
+            const dinero = Math.max(0, (riesgoDisponible * porcentaje / 100) - 1);
+            document.getElementById('dinero_escalada').value = formatNumber(dinero, 0);
+        }
+
+        // Calcular agregar posición
+        function calcularAgregar() {
+            const simbolo = document.getElementById('simbolo').value || 'CRYPTO';
+            const lotesActuales = validateNumber(document.getElementById('lotes').value) || 0;
+            const promedioActual = validateNumber(document.getElementById('promedio').value) || 0;
+            const stop = validateNumber(document.getElementById('stop').value);
+            const precioEntrada = validateNumber(document.getElementById('precio_entrada').value);
+            const dinero = validateNumber(document.getElementById('dinero_agregar').value);
+
+            if (!stop || !precioEntrada || !dinero) {
+                alerta('danger', '❌ Complete fields');
+                return;
+            }
+
+            if (dinero > riesgoDisponible) {
+                alerta('danger', '❌ Only $' + formatNumber(riesgoDisponible, 0) + ' available');
+                return;
+            }
+
+            const distancia = Math.abs(precioEntrada - stop);
+            const lotesAgregar = dinero / distancia;
+            const lotesNuevos = lotesActuales + lotesAgregar;
+
+            let promedioNuevo;
+            if (lotesActuales > 0 && promedioActual > 0) {
+                promedioNuevo = ((lotesActuales * promedioActual) + (lotesAgregar * precioEntrada)) / lotesNuevos;
+            } else {
+                promedioNuevo = precioEntrada;
+            }
+
+            const perdidaTotalReal = Math.abs(stop - promedioNuevo) * lotesNuevos;
+            const riesgoExacto = Math.abs(perdidaTotalReal - riesgoTotal) < 1;
+
+            // Formato nuevo tipo "📊 NUEVA ORDEN CALCULADA" para ADD
+            const resultado = `📊 NUEVA ORDEN CALCULADA
+🔹 ${simbolo.toLowerCase()}
+Tipo: ${document.getElementById('tipo').value}
+Riesgo: $${dinero.toFixed(0)}
+Entradas:
+- ${precioEntrada.toFixed(4)} → ${lotesAgregar.toFixed(6)} lotes
+Precio Promedio: ${precioEntrada.toFixed(4)}
+SL: ${stop.toFixed(4)} (Pérdida: ${dinero.toFixed(2)})
+Lotes Totales: ${lotesAgregar.toFixed(6)}
+✅ RIESGO EXACTO`;
+
+            document.getElementById('resultado').textContent = resultado;
+            
+            // Guardar formato bot simple para ADD
+            window.formatoParaBot = `BUY ${simbolo.toUpperCase()}USDT ${lotesAgregar.toFixed(6)} ${precioEntrada.toFixed(4)} SL:${stop.toFixed(4)}`;
+            
+            showTab('result');
+            alerta('success', '✅ Calculated');
+        }
+
+        // Calcular escalada
+        function calcularEscalada() {
+            const simbolo = document.getElementById('simbolo').value || 'CRYPTO';
+            const stop = validateNumber(document.getElementById('stop').value);
+            const desde = validateNumber(document.getElementById('desde').value);
+            const hasta = validateNumber(document.getElementById('hasta').value);
+            const numOrdenes = parseInt(document.getElementById('ordenes').value);
+            const dinero = validateNumber(document.getElementById('dinero_escalada').value);
+
+            const lotesActuales = validateNumber(document.getElementById('lotes').value) || 0;
+            const promedioActual = validateNumber(document.getElementById('promedio').value) || 0;
+
+            if (!stop || !desde || !hasta || !numOrdenes || !dinero) {
+                alerta('danger', '❌ Complete fields');
+                return;
+            }
+
+            if (dinero > riesgoDisponible) {
+                alerta('danger', '❌ Only $' + formatNumber(riesgoDisponible, 0) + ' available');
+                return;
+            }
+
+            const promedioEscalada = (desde + hasta) / 2;
+            const distancia = Math.abs(promedioEscalada - stop);
+            const lotesEscalada = dinero / distancia;
+            const lotesPorOrden = lotesEscalada / numOrdenes;
+            const espaciado = Math.abs(hasta - desde) / (numOrdenes - 1);
+
+            const lotesTotalesFinal = lotesActuales + lotesEscalada;
+            let promedioFinal;
+            
+            if (lotesActuales > 0 && promedioActual > 0) {
+                const valorActual = lotesActuales * promedioActual;
+                const valorEscalada = lotesEscalada * promedioEscalada;
+                promedioFinal = (valorActual + valorEscalada) / lotesTotalesFinal;
+            } else {
+                promedioFinal = promedioEscalada;
+            }
+
+            const perdidaTotalReal = Math.abs(stop - promedioFinal) * lotesTotalesFinal;
+            const riesgoExacto = Math.abs(perdidaTotalReal - riesgoTotal) < 1;
+
+            let resultado = `🔄 NUEVA ESCALADA
+
+📊 POSICIÓN ACTUAL:
+${lotesActuales > 0 ? lotesActuales.toFixed(3) + ' lotes @ $' + promedioActual.toFixed(4) : 'Sin posición'}
+
+🔄 NUEVA ESCALADA:
+$${desde.toFixed(4)} → $${hasta.toFixed(4)} con ${numOrdenes} órdenes
+${lotesEscalada.toFixed(3)} lotes nuevos
+Dinero usado: $${dinero.toFixed(0)}
+
+🎯 POSICIÓN FINAL TOTAL:
+Total lotes: ${lotesTotalesFinal.toFixed(3)}
+Precio promedio: $${promedioFinal.toFixed(4)}
+SL: $${stop.toFixed(4)}
+Pérdida total: $${perdidaTotalReal.toFixed(2)}${riesgoExacto ? ' ✅' : ' ⚠️'}
+
+Restante: $${formatNumber(riesgoDisponible - dinero, 0)}`;
+
+            if (numOrdenes <= 8) {
+                resultado += '\n\n📋 ÓRDENES DETALLADAS:\n';
+                for (let i = 0; i < numOrdenes; i++) {
+                    const precio = desde > hasta ? desde - (espaciado * i) : desde + (espaciado * i);
+                    resultado += `${i+1}. $${precio.toFixed(4)} → ${lotesPorOrden.toFixed(6)}\n`;
+                }
+            }
+
+            document.getElementById('resultado').textContent = resultado;
+            
+            // Guardar formato bot para escalada
+            const lado = document.getElementById('tipo').value === 'LONG' ? 'BUY' : 'SELL';
+            window.formatoParaBot = `SCALE ${simbolo.toUpperCase()}USDT ${lado} ${lotesEscalada.toFixed(6)} ${desde.toFixed(4)}-${hasta.toFixed(4)} ${numOrdenes} SL:${stop.toFixed(4)}`;
+            
+            showTab('result');
+            alerta('success', '✅ Calculated');
+        }
+
+        // Calcular combinado mejorado
+        function calcularCombinado() {
+            const simbolo = document.getElementById('simbolo').value || 'CRYPTO';
+            const tipo = document.getElementById('tipo').value;
+            const lotesActuales = validateNumber(document.getElementById('lotes').value) || 0;
+            const promedioActual = validateNumber(document.getElementById('promedio').value) || 0;
+            const stop = validateNumber(document.getElementById('stop').value);
+
+            if (!stop) {
+                alerta('danger', '❌ Set stop loss first');
+                return;
+            }
+
+            const precioEntrada = validateNumber(document.getElementById('precio_entrada').value);
+            const dineroAgregar = validateNumber(document.getElementById('dinero_agregar').value);
+            const desde = validateNumber(document.getElementById('desde').value);
+            const hasta = validateNumber(document.getElementById('hasta').value);
+            const numOrdenes = parseInt(document.getElementById('ordenes').value);
+            const dineroEscalada = validateNumber(document.getElementById('dinero_escalada').value);
+
+            const tieneAdd = precioEntrada && dineroAgregar;
+            const tieneScale = desde && hasta && numOrdenes && dineroEscalada;
+
+            if (!tieneAdd && !tieneScale) {
+                alerta('warning', '⚠️ Set add or scale data');
+                return;
+            }
+
+            let totalDineroOperacion = 0;
+            let lotesAdd = 0, lotesScale = 0, promedioScale = 0;
+
+            if (tieneAdd) {
+                const distanciaAdd = Math.abs(precioEntrada - stop);
+                lotesAdd = dineroAgregar / distanciaAdd;
+                totalDineroOperacion += dineroAgregar;
+            }
+
+            if (tieneScale) {
+                promedioScale = (desde + hasta) / 2;
+                const distanciaScale = Math.abs(promedioScale - stop);
+                lotesScale = dineroEscalada / distanciaScale;
+                totalDineroOperacion += dineroEscalada;
+            }
+
+            const totalLotes = lotesActuales + lotesAdd + lotesScale;
+            const valorTotal = (lotesActuales * promedioActual) + (lotesAdd * precioEntrada) + (lotesScale * promedioScale);
+            const promedioFinal = valorTotal / totalLotes;
+            const perdidaTotalReal = Math.abs(stop - promedioFinal) * totalLotes;
+            const riesgoExacto = Math.abs(perdidaTotalReal - riesgoTotal) < 1;
+
+            let resultado = `🔥 ESTRATEGIA COMBINADA
+
+📊 POSICIÓN ACTUAL:
+${lotesActuales > 0 ? lotesActuales.toFixed(3) + ' lotes @ $' + promedioActual.toFixed(4) : 'Sin posición'}
+Disponible: $${formatNumber(riesgoDisponible, 0)}
+
+`;
+
+            if (tieneAdd) {
+                resultado += `➕ ENTRADA DIRECTA:
+$${precioEntrada.toFixed(4)} con $${dineroAgregar.toFixed(0)} → ${lotesAdd.toFixed(3)} lotes
+
+`;
+            }
+
+            if (tieneScale) {
+                resultado += `🔄 ESCALADA DEFENSIVA:
+$${desde.toFixed(4)} a $${hasta.toFixed(4)} con ${numOrdenes} órdenes
+$${dineroEscalada.toFixed(0)} → ${lotesScale.toFixed(3)} lotes
+
+`;
+            }
+
+            resultado += `🎯 POSICIÓN FINAL TOTAL:
+Total lotes: ${totalLotes.toFixed(3)}
+Precio promedio: $${promedioFinal.toFixed(4)}
+SL: $${stop.toFixed(4)}
+Pérdida total: $${perdidaTotalReal.toFixed(2)}${riesgoExacto ? ' ✅' : ' ⚠️'}
+
+💰 DINERO:
+Esta operación: $${totalDineroOperacion.toFixed(0)}
+Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
+
+            document.getElementById('resultado').textContent = resultado;
+
+            // Crear formato bot para operación combinada
+            let formatoBot = '📊 NUEVA ORDEN CALCULADA\n\n';
+            formatoBot += `🔹 ${simbolo.toLowerCase()}\n\n`;
+            formatoBot += `Tipo: ${tipo}\n`;
+            formatoBot += `Riesgo: $${totalDineroOperacion.toFixed(0)}\n\n`;
+            formatoBot += 'Entradas:\n';
+
+            if (tieneAdd) {
+                formatoBot += `- ${precioEntrada.toFixed(4)} → ${lotesAdd.toFixed(6)} lotes\n`;
+            }
+
+            if (tieneScale) {
+                formatoBot += `- Escalonada: ${desde.toFixed(4)} a ${hasta.toFixed(4)} con ${numOrdenes} órdenes → ${lotesScale.toFixed(6)} lotes\n`;
+            }
+
+            // Promedio y SL de SOLO la nueva operación
+            let promedioNuevaOp, lotesNuevaOp;
+            
+            if (tieneAdd && tieneScale) {
+                lotesNuevaOp = lotesAdd + lotesScale;
+                promedioNuevaOp = (lotesAdd * precioEntrada + lotesScale * promedioScale) / lotesNuevaOp;
+            } else if (tieneAdd) {
+                lotesNuevaOp = lotesAdd;
+                promedioNuevaOp = precioEntrada;
+            } else if (tieneScale) {
+                lotesNuevaOp = lotesScale;
+                promedioNuevaOp = promedioScale;
+            }
+
+            formatoBot += `\nPrecio Promedio: ${promedioNuevaOp.toFixed(4)}\n`;
+            formatoBot += `SL: ${stop.toFixed(4)} (Pérdida: ${totalDineroOperacion.toFixed(2)})\n\n`;
+            formatoBot += `Lotes Totales: ${lotesNuevaOp.toFixed(6)}\n\n`;
+            formatoBot += '✅ RIESGO EXACTO';
+
+            window.formatoParaBot = formatoBot;
+            alerta('success', '✅ Estrategia calculada - Formato dual listo');
+        }
+
+        // Parsear señal
+        function parsearSenal() {
+            const input = document.getElementById('parse_input').value.toLowerCase();
+            if (!input.trim()) {
+                alerta('warning', '⚠️ Paste signal first');
+                return;
+            }
+
+            // Extraer símbolo
+            const simboloMatch = input.match(/^([a-z]{2,5})/i);
+            if (simboloMatch) {
+                document.getElementById('simbolo').value = simboloMatch[1].toUpperCase();
+            }
+
+            // Extraer riesgo
+            const riesgoMatch = input.match(/(\d+)\$?\s*riesgo/i) || input.match(/\$(\d+)/);
+            if (riesgoMatch) {
+                document.getElementById('riesgo').value = riesgoMatch[1];
+            }
+
+            // Extraer stop
+            const stopMatch = input.match(/(?:stop|sl)[:\s]*(\d+)/i);
+            if (stopMatch) {
+                document.getElementById('stop').value = stopMatch[1];
+            }
+
+            // Extraer entrada
+            const entradaMatch = input.match(/(?:entrada|entry)[:\s]*(\d+)\s*(\d+)%/i);
+            if (entradaMatch) {
+                document.getElementById('precio_entrada').value = entradaMatch[1];
+                const riesgo = validateNumber(document.getElementById('riesgo').value) || 100;
+                const dinero = formatNumber((riesgo * parseInt(entradaMatch[2]) / 100), 0);
+                document.getElementById('dinero_agregar').value = dinero;
+            }
+
+            // Extraer escalada
+            const escaladaMatch = input.match(/(?:escalada|scale)[:\s]*(\d+)\s*a\s*(\d+)\s*con\s*(\d+)\s*ordenes?\s*(\d+)%/i);
+            if (escaladaMatch) {
+                document.getElementById('desde').value = escaladaMatch[1];
+                document.getElementById('hasta').value = escaladaMatch[2];
+                document.getElementById('ordenes').value = escaladaMatch[3];
+                const riesgo = validateNumber(document.getElementById('riesgo').value) || 100;
+                const dinero = formatNumber((riesgo * parseInt(escaladaMatch[4]) / 100), 0);
+                document.getElementById('dinero_escalada').value = dinero;
+            }
+
+            if (document.getElementById('riesgo').value) {
+                actualizarStatus();
+            }
+
+            alerta('success', '✅ Signal loaded');
+            showTab('config');
+        }
+
+        // Copiar al portapapeles
+        function copiar() {
+            let texto;
+            
+            // Si hay formato bot guardado, dar opción
+            if (window.formatoParaBot) {
+                const useBot = confirm("¿Copiar formato para bot?\nOK = Formato bot\nCancel = Formato pantalla");
+                texto = useBot ? window.formatoParaBot : document.getElementById('resultado').textContent;
+            } else {
+                texto = document.getElementById('resultado').textContent;
+            }
+            
+            if (texto.includes('Setup data')) {
+                alerta('warning', '⚠️ Calculate first');
+                return;
+            }
+            
+            navigator.clipboard.writeText(texto).then(function() {
+                alerta('success', '✅ Copied to clipboard');
+            }).catch(function() {
+                // Método alternativo para navegadores antiguos
+                const textArea = document.createElement('textarea');
+                textArea.value = texto;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alerta('success', '✅ Copied to clipboard');
+            });
+        }
+
+        // Función mejorada para enviar a Telegram
+        async function enviarTelegram() {
+            let textoBot;
+            
+            // Si hay formato guardado para bot, usarlo
+            if (window.formatoParaBot) {
+                textoBot = window.formatoParaBot;
+                alerta('info', '📤 Enviando formato optimizado para bot...');
+            } else {
+                // Usar texto de pantalla como fallback
+                textoBot = document.getElementById('resultado').textContent;
+                if (textoBot.includes('Setup data')) {
+                    alerta('warning', '⚠️ Calculate first');
+                    return;
+                }
+                alerta('info', '📤 Enviando formato de pantalla...');
+            }
+
+            const btn = document.getElementById('btnTelegram');
+            const originalText = btn.innerHTML;
+            
+            // Mostrar loading
+            btn.innerHTML = '<span class="loading"></span>Sending...';
+            btn.disabled = true;
+            
+            try {
+                const botToken = "7582987755:AAFBdNQFZ4McMsJwt60gvTs9CW2XkKZ3OMA";
+                const chatId = "7471012566";
+                const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: textoBot
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.ok) {
+                    alerta('success', '✅ Enviado a Telegram correctamente');
+                    // Limpiar formato guardado después de envío exitoso
+                    window.formatoParaBot = null;
+                } else {
+                    throw new Error(data.description || 'Error desconocido');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                
+                // Método alternativo: Copiar y mostrar instrucción
+                try {
+                    await navigator.clipboard.writeText(textoBot);
+                    alerta('warning', '⚠️ Copiado al portapapeles - Envía manualmente al bot');
+                } catch (copyError) {
+                    // Si ni siquiera puede copiar, abrir Telegram Web
+                    const telegramWebUrl = `https://t.me/share/url?url=${encodeURIComponent('Trading Calculator:')}&text=${encodeURIComponent(textoBot)}`;
+                    window.open(telegramWebUrl, '_blank');
+                    alerta('info', '📱 Telegram Web abierto - Envía manualmente');
+                }
+            } finally {
+                // Restaurar botón
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Resetear todo
+        function resetearTodo() {
+            const campos = ['simbolo', 'riesgo', 'lotes', 'promedio', 'stop', 
+                           'precio_entrada', 'dinero_agregar', 'desde', 'hasta', 
+                           'ordenes', 'dinero_escalada'];
+            
+            campos.forEach(campo => {
+                const elemento = document.getElementById(campo);
+                if (elemento) elemento.value = '';
+            });
+
+            // Resetear select a LONG
+            document.getElementById('tipo').value = 'LONG';
+
+            // Limpiar textarea
+            const parseInput = document.getElementById('parse_input');
+            if (parseInput) parseInput.value = '';
+
+            limpiarPresets();
+            
+            // Resetear variables globales
+            riesgoTotal = 0;
+            riesgoUsado = 0;
+            riesgoDisponible = 0;
+
+            document.getElementById('usado').textContent = '$0';
+            document.getElementById('disponible').textContent = '$0';
+            document.getElementById('resultado').textContent = '💡 Setup data and calculate...';
+            document.getElementById('alertas').innerHTML = '';
+
+            // Limpiar formato bot guardado
+            window.formatoParaBot = null;
+
+            alerta('success', '✅ Reset complete');
+        }
+
+        // Limpiar presets activos
+        function limpiarPresets() {
+            document.querySelectorAll('.preset').forEach(preset => {
+                preset.classList.remove('active');
+            });
+        }
+
+        // Sistema de alertas mejorado
+        function alerta(tipo, mensaje) {
+            const alertasContainer = document.getElementById('alertas');
+            
+            // Limpiar alertas anteriores
+            alertasContainer.innerHTML = '';
+            
+            // Crear nueva alerta
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo}`;
+            alertDiv.textContent = mensaje;
+            
+            alertasContainer.appendChild(alertDiv);
+            
+            // Auto-remove después de 4 segundos (excepto errores)
+            if (tipo !== 'danger') {
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.style.opacity = '0';
+                        alertDiv.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            if (alertDiv.parentNode) {
+                                alertDiv.remove();
+                            }
+                        }, 300);
+                    }
+                }, 4000);
+            }
+        }
+
+        // Event listeners y auto-update
+        document.addEventListener('DOMContentLoaded', function() {
+            // Campos que disparan auto-update
+            const camposAuto = ['riesgo', 'lotes', 'promedio', 'stop'];
+            
+            camposAuto.forEach(campoId => {
+                const campo = document.getElementById(campoId);
+                if (campo) {
+                    // Auto-update con delay
+                    campo.addEventListener('input', function() {
+                        clearTimeout(this.updateTimeout);
+                        this.updateTimeout = setTimeout(() => {
+                            actualizarStatus();
+                        }, 500);
+                    });
+                    
+                    // Update inmediato al salir del campo
+                    campo.addEventListener('blur', actualizarStatus);
+                }
+            });
+
+            // Validaciones en tiempo real - SIMPLIFICADAS
+            const camposNumericos = document.querySelectorAll('input[type="number"]');
+            camposNumericos.forEach(campo => {
+                campo.addEventListener('input', function() {
+                    // Solo validar cuando el usuario termine de escribir
+                    // No interferir durante la escritura
+                });
+                
+                // Validar solo al salir del campo para no interferir
+                campo.addEventListener('blur', function() {
+                    let valor = this.value;
+                    
+                    // Limpiar caracteres no válidos
+                    valor = valor.replace(/[^0-9.\-]/g, '');
+                    
+                    // Permitir solo un punto decimal
+                    const partes = valor.split('.');
+                    if (partes.length > 2) {
+                        valor = partes[0] + '.' + partes.slice(1).join('');
+                    }
+                    
+                    // Solo para campos que no permiten negativos
+                    const allowNegative = ['stop', 'promedio', 'actual', 'precio_entrada', 'desde', 'hasta'];
+                    if (!allowNegative.includes(this.id)) {
+                        const num = parseFloat(valor);
+                        if (num < 0) {
+                            valor = Math.abs(num).toString();
+                        }
+                    }
+                    
+                    this.value = valor;
+                });
+            });
+
+            // Auto-save en localStorage
+            const saveFields = () => {
+                const data = {};
+                ['simbolo', 'riesgo', 'tipo', 'lotes', 'promedio', 'stop'].forEach(field => {
+                    const element = document.getElementById(field);
+                    if (element && element.value) {
+                        data[field] = element.value;
+                    }
+                });
+                try {
+                    localStorage.setItem('tradingCalcData', JSON.stringify(data));
+                } catch(e) {
+                    // Ignore localStorage errors
+                }
+            };
+
+            // Auto-load desde localStorage
+            const loadFields = () => {
+                try {
+                    const data = JSON.parse(localStorage.getItem('tradingCalcData') || '{}');
+                    Object.keys(data).forEach(field => {
+                        const element = document.getElementById(field);
+                        if (element) {
+                            element.value = data[field];
+                        }
+                    });
+                    if (data.riesgo) {
+                        actualizarStatus();
+                    }
+                } catch (e) {
+                    // Ignore errors
+                }
+            };
+
+            // Load data on start
+            loadFields();
+
+            // Save data on change
+            document.querySelectorAll('input, select').forEach(element => {
+                element.addEventListener('change', saveFields);
+            });
+
+            // Mostrar tip inicial
+            setTimeout(() => {
+                if (document.getElementById('resultado').textContent.includes('Setup data')) {
+                    alerta('info', '💡 Tip: Start by setting Symbol and Total Risk');
+                }
+            }, 1500);
+        });
+    </script>
 </body>
 </html>
