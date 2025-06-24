@@ -420,6 +420,63 @@
     </div>
 
     <script>
+        // 🧠 FUNCIÓN DE DISTRIBUCIÓN INTELIGENTE PARA TODAS LAS CRYPTOS
+        function distribuirCantidadesInteligente(totalLotes, numOrdenes, tipoOperacion) {
+            let pesos;
+            
+            if (tipoOperacion === 'LONG') {
+                // COMPRAS: Más lotes ABAJO (mejores precios)
+                if (numOrdenes <= 5) {
+                    pesos = [8, 12, 20, 30, 30];
+                } else if (numOrdenes <= 10) {
+                    pesos = [3, 4, 5, 7, 10, 15, 20, 16, 12, 8];
+                } else if (numOrdenes <= 15) {
+                    pesos = [2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 14, 12, 10, 7];
+                } else if (numOrdenes <= 20) {
+                    pesos = [1, 1, 2, 2, 3, 4, 5, 6, 8, 10, 12, 14, 12, 10, 8, 6, 5, 4, 3, 2];
+                } else {
+                    pesos = [];
+                    for (let i = 0; i < numOrdenes; i++) {
+                        const peso = 1 + (i * 2);
+                        pesos.push(peso);
+                    }
+                }
+            } else {
+                // VENTAS/SHORTS: Más lotes ARRIBA (mejores precios)
+                if (numOrdenes <= 5) {
+                    pesos = [30, 30, 20, 12, 8];
+                } else if (numOrdenes <= 10) {
+                    pesos = [8, 12, 16, 20, 15, 10, 7, 5, 4, 3];
+                } else if (numOrdenes <= 15) {
+                    pesos = [7, 10, 12, 14, 16, 14, 12, 10, 8, 7, 6, 5, 4, 3, 2];
+                } else if (numOrdenes <= 20) {
+                    pesos = [2, 3, 4, 5, 6, 8, 10, 12, 14, 12, 10, 8, 6, 5, 4, 3, 2, 2, 1, 1];
+                } else {
+                    pesos = [];
+                    for (let i = 0; i < numOrdenes; i++) {
+                        const peso = numOrdenes - i;
+                        pesos.push(peso);
+                    }
+                }
+            }
+            
+            if (pesos.length !== numOrdenes) {
+                const ratio = numOrdenes / pesos.length;
+                const nuevoPesos = [];
+                for (let i = 0; i < numOrdenes; i++) {
+                    const index = Math.floor(i / ratio);
+                    nuevoPesos.push(pesos[Math.min(index, pesos.length - 1)]);
+                }
+                pesos = nuevoPesos;
+            }
+            
+            const totalPeso = pesos.reduce((sum, peso) => sum + peso, 0);
+            const porcentajes = pesos.map(peso => peso / totalPeso);
+            const cantidades = porcentajes.map(pct => totalLotes * pct);
+            
+            return cantidades;
+        }
+
         // Variables globales
         let riesgoTotal = 0;
         let riesgoUsado = 0;
@@ -589,9 +646,12 @@ Lotes Totales: ${lotesAgregar.toFixed(6)}
             const promedioEscalada = (desde + hasta) / 2;
             const distancia = Math.abs(promedioEscalada - stop);
             const lotesEscalada = dinero / distancia;
-            const lotesPorOrden = lotesEscalada / numOrdenes;
+            
+            // 🧠 USAR DISTRIBUCIÓN INTELIGENTE
+            const tipo = document.getElementById('tipo').value;
+            const cantidadesInteligentes = distribuirCantidadesInteligente(lotesEscalada, numOrdenes, tipo);
+            
             const espaciado = Math.abs(hasta - desde) / (numOrdenes - 1);
-
             const lotesTotalesFinal = lotesActuales + lotesEscalada;
             let promedioFinal;
             
@@ -628,7 +688,7 @@ Restante: $${formatNumber(riesgoDisponible - dinero, 0)}`;
                 resultado += '\n\n📋 ÓRDENES DETALLADAS:\n';
                 for (let i = 0; i < numOrdenes; i++) {
                     const precio = desde > hasta ? desde - (espaciado * i) : desde + (espaciado * i);
-                    resultado += `${i+1}. $${precio.toFixed(4)} → ${lotesPorOrden.toFixed(6)}\n`;
+                    resultado += `${i+1}. $${precio.toFixed(4)} → ${cantidadesInteligentes[i].toFixed(6)}\n`;
                 }
             }
 
