@@ -600,38 +600,54 @@
             const perdidaTotalReal = Math.abs(stop - promedioNuevo) * lotesNuevos;
             const riesgoExacto = Math.abs(perdidaTotalReal - riesgoTotal) < 1;
 
-            // Formato nuevo tipo "📊 NUEVA ORDEN CALCULADA" para ADD
-            const resultado = `📊 NUEVA ORDEN CALCULADA
+            // 🎯 OPTIMIZAR DECIMALES SEGÚN SÍMBOLO
+            const symbol = simbolo.toLowerCase();
+            let lots, priceDecimals;
+
+            // Configurar decimales por símbolo
+            if (symbol === 'btc') {
+                lots = lotesAgregar.toFixed(3);        // BTC: 0.026
+                priceDecimals = 2;                     // Precio: 100580.72
+            } else if (['eth', 'sol', 'bnb', 'avax', 'dot', 'link', 'uni'].includes(symbol)) {
+                lots = lotesAgregar.toFixed(2);        // ETH: 0.50  
+                priceDecimals = 2;                     // Precio: 3456.78
+            } else if (['pepe', '1000pepe', 'shib', 'floki', '1000bonk', '1000sats'].includes(symbol)) {
+                lots = Math.round(lotesAgregar).toString();  // PEPE: 50000
+                priceDecimals = 6;                     // Precio: 0.000123
+            } else if (['kaito', 'wif', 'popcat', 'moodeng'].includes(symbol)) {
+                lots = lotesAgregar.toFixed(1);        // KAITO: 586.8
+                priceDecimals = 4;                     // Precio: 1.4567
+            } else {
+                // Tokens generales
+                lots = lotesAgregar.toFixed(3);        // General: 123.456
+                priceDecimals = 4;                     // Precio: 12.3456
+            }
+
+           // Formatear precios con decimales apropiados
+           const precioFormateado = precioEntrada.toFixed(priceDecimals);
+           const stopFormateado = stop.toFixed(priceDecimals);
+
+           // Formato nuevo tipo "📊 NUEVA ORDEN CALCULADA" para ADD
+           const resultado = `📊 NUEVA ORDEN CALCULADA
 🔹 ${simbolo.toLowerCase()}
 Tipo: ${document.getElementById('tipo').value}
 Riesgo: $${dinero.toFixed(0)}
 Entradas:
-- ${precioEntrada.toFixed(4)} → ${lotesAgregar.toFixed(6)} lotes
-Precio Promedio: ${precioEntrada.toFixed(4)}
-SL: ${stop.toFixed(4)} (Pérdida: ${dinero.toFixed(2)})
-Lotes Totales: ${lotesAgregar.toFixed(6)}
+- ${precioFormateado} → ${lots} lotes
+Precio Promedio: ${precioFormateado}
+SL: ${stopFormateado} (Pérdida: ${dinero.toFixed(2)})
+Lotes Totales: ${lots}
 ✅ RIESGO EXACTO`;
 
-            document.getElementById('resultado').textContent = resultado;
-            
-            // 🎯 DECIMALES CORRECTOS SEGÚN SÍMBOLO
-           const symbol = simbolo.toLowerCase();
-           let lots;
-           if (symbol === 'btc') {
-               lots = lotesAgregar.toFixed(3);                    // BTC: 0.026
-           } else if (['eth', 'sol', 'bnb', 'avax'].includes(symbol)) {
-               lots = lotesAgregar.toFixed(2);                    // ETH: 0.50
-           } else if (['pepe', '1000pepe', 'shib', 'floki'].includes(symbol)) {
-               lots = Math.round(lotesAgregar).toString();        // PEPE: 50000
-           } else {
-               lots = lotesAgregar.toFixed(3);                    // KAITO: 586.756
-           }
+           document.getElementById('resultado').textContent = resultado;
+
            // Guardar formato bot con decimales correctos
-           window.formatoParaBot = `BUY ${simbolo.toUpperCase()}USDT ${lots} ${precioEntrada.toFixed(4)} SL:${stop.toFixed(4)}`;
+           window.formatoParaBot = `BUY ${simbolo.toUpperCase()}USDT ${lots} ${precioFormateado} SL:${stopFormateado}`;
            
            showTab('result');
            alerta('success', '✅ Calculated');
        }
+       
        // Calcular escalada
         function calcularEscalada() {
             const simbolo = document.getElementById('simbolo').value || 'CRYPTO';
@@ -677,20 +693,42 @@ Lotes Totales: ${lotesAgregar.toFixed(6)}
             const perdidaTotalReal = Math.abs(stop - promedioFinal) * lotesTotalesFinal;
             const riesgoExacto = Math.abs(perdidaTotalReal - riesgoTotal) < 1;
 
+            // 🎯 OPTIMIZAR DECIMALES SEGÚN SÍMBOLO PARA ESCALADA
+            const symbol = simbolo.toLowerCase();
+            let priceDecimals;
+
+            if (symbol === 'btc') {
+                priceDecimals = 2;
+            } else if (['eth', 'sol', 'bnb', 'avax', 'dot', 'link', 'uni'].includes(symbol)) {
+                priceDecimals = 2;
+            } else if (['pepe', '1000pepe', 'shib', 'floki', '1000bonk', '1000sats'].includes(symbol)) {
+                priceDecimals = 6;
+            } else if (['kaito', 'wif', 'popcat', 'moodeng'].includes(symbol)) {
+                priceDecimals = 4;
+            } else {
+                priceDecimals = 4;
+            }
+
+            // Formatear precios con decimales apropiados
+            const desdeFormateado = desde.toFixed(priceDecimals);
+            const hastaFormateado = hasta.toFixed(priceDecimals);
+            const stopFormateado = stop.toFixed(priceDecimals);
+            const promedioFormateado = promedioFinal.toFixed(priceDecimals);
+
             let resultado = `🔄 NUEVA ESCALADA
 
 📊 POSICIÓN ACTUAL:
-${lotesActuales > 0 ? lotesActuales.toFixed(3) + ' lotes @ $' + promedioActual.toFixed(4) : 'Sin posición'}
+${lotesActuales > 0 ? lotesActuales.toFixed(3) + ' lotes @ $' + promedioActual.toFixed(priceDecimals) : 'Sin posición'}
 
 🔄 NUEVA ESCALADA:
-$${desde.toFixed(4)} → $${hasta.toFixed(4)} con ${numOrdenes} órdenes
+$${desdeFormateado} → $${hastaFormateado} con ${numOrdenes} órdenes
 ${lotesEscalada.toFixed(3)} lotes nuevos
 Dinero usado: $${dinero.toFixed(0)}
 
 🎯 POSICIÓN FINAL TOTAL:
 Total lotes: ${lotesTotalesFinal.toFixed(3)}
-Precio promedio: $${promedioFinal.toFixed(4)}
-SL: $${stop.toFixed(4)}
+Precio promedio: $${promedioFormateado}
+SL: $${stopFormateado}
 Pérdida total: $${perdidaTotalReal.toFixed(2)}${riesgoExacto ? ' ✅' : ' ⚠️'}
 
 Restante: $${formatNumber(riesgoDisponible - dinero, 0)}`;
@@ -699,15 +737,15 @@ Restante: $${formatNumber(riesgoDisponible - dinero, 0)}`;
                 resultado += '\n\n📋 ÓRDENES DETALLADAS:\n';
                 for (let i = 0; i < numOrdenes; i++) {
                     const precio = desde > hasta ? desde - (espaciado * i) : desde + (espaciado * i);
-                    resultado += `${i+1}. $${precio.toFixed(4)} → ${cantidadesInteligentes[i].toFixed(6)}\n`;
+                    resultado += `${i+1}. $${precio.toFixed(priceDecimals)} → ${cantidadesInteligentes[i].toFixed(6)}\n`;
                 }
             }
 
             document.getElementById('resultado').textContent = resultado;
             
-            // Guardar formato bot para escalada
+            // Guardar formato bot para escalada con decimales optimizados
             const lado = document.getElementById('tipo').value === 'LONG' ? 'BUY' : 'SELL';
-            window.formatoParaBot = `SCALE ${simbolo.toUpperCase()}USDT ${lado} ${lotesEscalada.toFixed(6)} ${desde.toFixed(4)}-${hasta.toFixed(4)} ${numOrdenes} SL:${stop.toFixed(4)}`;
+            window.formatoParaBot = `SCALE ${simbolo.toUpperCase()}USDT ${lado} ${lotesEscalada.toFixed(6)} ${desdeFormateado}-${hastaFormateado} ${numOrdenes} SL:${stopFormateado}`;
             
             showTab('result');
             alerta('success', '✅ Calculated');
