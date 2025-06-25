@@ -614,14 +614,25 @@ Lotes Totales: ${lotesAgregar.toFixed(6)}
 
             document.getElementById('resultado').textContent = resultado;
             
-            // Guardar formato bot simple para ADD
-            window.formatoParaBot = `BUY ${simbolo.toUpperCase()}USDT ${lotesAgregar.toFixed(6)} ${precioEntrada.toFixed(4)} SL:${stop.toFixed(4)}`;
-            
-            showTab('result');
-            alerta('success', '✅ Calculated');
-        }
-
-        // Calcular escalada
+            // 🎯 DECIMALES CORRECTOS SEGÚN SÍMBOLO
+           const symbol = simbolo.toLowerCase();
+           let lots;
+           if (symbol === 'btc') {
+               lots = lotesAgregar.toFixed(3);                    // BTC: 0.026
+           } else if (['eth', 'sol', 'bnb', 'avax'].includes(symbol)) {
+               lots = lotesAgregar.toFixed(2);                    // ETH: 0.50
+           } else if (['pepe', '1000pepe', 'shib', 'floki'].includes(symbol)) {
+               lots = Math.round(lotesAgregar).toString();        // PEPE: 50000
+           } else {
+               lots = lotesAgregar.toFixed(3);                    // KAITO: 586.756
+           }
+           // Guardar formato bot con decimales correctos
+           window.formatoParaBot = `BUY ${simbolo.toUpperCase()}USDT ${lots} ${precioEntrada.toFixed(4)} SL:${stop.toFixed(4)}`;
+           
+           showTab('result');
+           alerta('success', '✅ Calculated');
+       }
+       // Calcular escalada
         function calcularEscalada() {
             const simbolo = document.getElementById('simbolo').value || 'CRYPTO';
             const stop = validateNumber(document.getElementById('stop').value);
