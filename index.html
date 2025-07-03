@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +26,7 @@
             width: 350px;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             position: sticky;
             top: 15px;
@@ -125,14 +126,18 @@
             margin-bottom: 4px;
         }
 
-        .field input, .field textarea, .field select {
+        .field input,
+        .field textarea,
+        .field select {
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 13px;
         }
 
-        .field input:focus, .field textarea:focus, .field select:focus {
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
             outline: none;
             border-color: #4ECDC4;
         }
@@ -178,13 +183,24 @@
             transition: all 0.3s;
         }
 
-        .btn-primary { background: #4ECDC4; color: white; }
-        .btn-warning { background: #ffc107; color: white; }
-        .btn-danger { background: #dc3545; color: white; }
+        .btn-primary {
+            background: #4ECDC4;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
 
         .btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .btn:disabled {
@@ -218,14 +234,40 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
-        .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .alert-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
 
         .actions {
             display: grid;
@@ -252,11 +294,17 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -279,6 +327,7 @@
             <button class="tab active" onclick="showTab('config')">⚙️</button>
             <button class="tab" onclick="showTab('add')">➕</button>
             <button class="tab" onclick="showTab('scale')">🔄</button>
+            <button class="tab" onclick="showTab('postTP')">📈</button>
             <button class="tab" onclick="showTab('parse')">📋</button>
             <button class="tab" onclick="showTab('result')">📊</button>
         </div>
@@ -393,13 +442,75 @@
             <button class="btn btn-warning" onclick="calcularEscalada()">🧮 Calc</button>
         </div>
 
+        <!-- POST-TP TAB -->
+        <div id="postTP" class="tab-content">
+            <div class="alert alert-info">
+                💡 Modo: Agregar a posición con TP parcial
+            </div>
+
+            <!-- ENTRADA SIMPLE -->
+            <div class="form-grid">
+                <div class="field">
+                    <label>📈 Precio Add</label>
+                    <input type="number" id="precio_post_tp" step="0.01">
+                </div>
+                <div class="field">
+                    <label>💰 Dinero Simple</label>
+                    <input type="number" id="dinero_post_tp" step="0.01">
+                </div>
+            </div>
+
+            <!-- ESCALADA POST-TP -->
+            <div class="alert alert-warning" style="margin: 10px 0 5px 0; font-size: 0.7rem; padding: 4px 8px;">
+                ⚔️ ESCALADA POST-TP (Opcional)
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>📈 Desde</label>
+                    <input type="number" id="desde_post_tp" step="0.01">
+                </div>
+                <div class="field">
+                    <label>📉 Hasta</label>
+                    <input type="number" id="hasta_post_tp" step="0.01">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>🔢 Órdenes</label>
+                    <input type="number" id="ordenes_post_tp" min="2" max="15">
+                </div>
+                <div class="field">
+                    <label>💰 Dinero Escalada</label>
+                    <input type="number" id="dinero_escalada_post_tp" step="0.01">
+                </div>
+            </div>
+
+            <!-- STOP DESEADO -->
+            <div class="form-grid">
+                <div class="field">
+                    <label>🛡️ Stop Deseado</label>
+                    <input type="number" id="stop_post_tp" step="0.01">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <div></div>
+                </div>
+            </div>
+
+            <button class="btn btn-warning" onclick="calcularPostTP()">📈 Calc Post-TP</button>
+        </div>
+
         <!-- PARSE TAB -->
         <div id="parse" class="tab-content">
             <div class="field">
                 <label>📋 Pegar señal</label>
-                <textarea id="parse_input" style="width:100%; height:80px; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:11px; resize:none;" placeholder="BTC entrada 61000 30% escalada 59500 a 58500 con 20 ordenes 50% stop 58000"></textarea>
+                <textarea id="parse_input"
+                    style="width:100%; height:80px; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:11px; resize:none;"
+                    placeholder="BTC entrada 61000 30% escalada 59500 a 58500 con 20 ordenes 50% stop 58000"></textarea>
             </div>
-            
+
             <button class="btn btn-primary" onclick="parsearSenal()">🔄 Cargar</button>
         </div>
 
@@ -412,7 +523,7 @@
                 <button class="btn btn-warning" onclick="enviarTelegram()" id="btnTelegram">📤 Bot</button>
                 <button class="btn btn-danger" onclick="resetearTodo()">🔄 Reset</button>
             </div>
-            
+
             <button class="btn btn-primary" onclick="calcularCombinado()" style="margin-top:8px;">🔥 Combined</button>
         </div>
 
@@ -423,7 +534,7 @@
         // 🧠 FUNCIÓN DE DISTRIBUCIÓN INTELIGENTE PARA TODAS LAS CRYPTOS
         function distribuirCantidadesInteligente(totalLotes, numOrdenes, tipoOperacion) {
             let pesos;
-            
+
             if (tipoOperacion === 'LONG') {
                 // COMPRAS: Más lotes ABAJO (mejores precios)
                 if (numOrdenes <= 5) {
@@ -459,7 +570,7 @@
                     }
                 }
             }
-            
+
             if (pesos.length !== numOrdenes) {
                 const ratio = numOrdenes / pesos.length;
                 const nuevoPesos = [];
@@ -469,11 +580,11 @@
                 }
                 pesos = nuevoPesos;
             }
-            
+
             const totalPeso = pesos.reduce((sum, peso) => sum + peso, 0);
             const porcentajes = pesos.map(peso => peso / totalPeso);
             const cantidades = porcentajes.map(pct => totalLotes * pct);
-            
+
             return cantidades;
         }
 
@@ -499,11 +610,11 @@
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
-            
+
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
+
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
         }
@@ -546,7 +657,7 @@
         function presetAgregar(valor) {
             limpiarPresets();
             event.target.classList.add('active');
-            
+
             if (valor === 'todo') {
                 document.getElementById('dinero_agregar').value = formatNumber(Math.max(0, riesgoDisponible - 1), 0);
             } else if (typeof valor === 'number') {
@@ -562,7 +673,7 @@
         function presetEscalada(porcentaje) {
             limpiarPresets();
             event.target.classList.add('active');
-            
+
             const dinero = Math.max(0, (riesgoDisponible * porcentaje / 100) - 1);
             document.getElementById('dinero_escalada').value = formatNumber(dinero, 0);
         }
@@ -623,12 +734,12 @@
                 priceDecimals = 4;                     // Precio: 12.3456
             }
 
-           // Formatear precios con decimales apropiados
-           const precioFormateado = precioEntrada.toFixed(priceDecimals);
-           const stopFormateado = stop.toFixed(priceDecimals);
+            // Formatear precios con decimales apropiados
+            const precioFormateado = precioEntrada.toFixed(priceDecimals);
+            const stopFormateado = stop.toFixed(priceDecimals);
 
-           // Formato nuevo tipo "📊 NUEVA ORDEN CALCULADA" para ADD
-           const resultado = `📊 NUEVA ORDEN CALCULADA
+            // Formato nuevo tipo "📊 NUEVA ORDEN CALCULADA" para ADD
+            const resultado = `📊 NUEVA ORDEN CALCULADA
 🔹 ${simbolo.toLowerCase()}
 Tipo: ${document.getElementById('tipo').value}
 Riesgo: $${dinero.toFixed(0)}
@@ -639,16 +750,16 @@ SL: ${stopFormateado} (Pérdida: ${dinero.toFixed(2)})
 Lotes Totales: ${lots}
 ✅ RIESGO EXACTO`;
 
-           document.getElementById('resultado').textContent = resultado;
+            document.getElementById('resultado').textContent = resultado;
 
-           // Guardar formato bot con decimales correctos
-           window.formatoParaBot = `BUY ${simbolo.toUpperCase()}USDT ${lots} ${precioFormateado} SL:${stopFormateado}`;
-           
-           showTab('result');
-           alerta('success', '✅ Calculated');
-       }
-       
-       // Calcular escalada
+            // Guardar formato bot con decimales correctos
+            window.formatoParaBot = `BUY ${simbolo.toUpperCase()}USDT ${lots} ${precioFormateado} SL:${stopFormateado}`;
+
+            showTab('result');
+            alerta('success', '✅ Calculated');
+        }
+
+        // Calcular escalada
         function calcularEscalada() {
             const simbolo = document.getElementById('simbolo').value || 'CRYPTO';
             const stop = validateNumber(document.getElementById('stop').value);
@@ -673,15 +784,15 @@ Lotes Totales: ${lots}
             const promedioEscalada = (desde + hasta) / 2;
             const distancia = Math.abs(promedioEscalada - stop);
             const lotesEscalada = dinero / distancia;
-            
+
             // 🧠 USAR DISTRIBUCIÓN INTELIGENTE
             const tipo = document.getElementById('tipo').value;
             const cantidadesInteligentes = distribuirCantidadesInteligente(lotesEscalada, numOrdenes, tipo);
-            
+
             const espaciado = Math.abs(hasta - desde) / (numOrdenes - 1);
             const lotesTotalesFinal = lotesActuales + lotesEscalada;
             let promedioFinal;
-            
+
             if (lotesActuales > 0 && promedioActual > 0) {
                 const valorActual = lotesActuales * promedioActual;
                 const valorEscalada = lotesEscalada * promedioEscalada;
@@ -737,16 +848,16 @@ Restante: $${formatNumber(riesgoDisponible - dinero, 0)}`;
                 resultado += '\n\n📋 ÓRDENES DETALLADAS:\n';
                 for (let i = 0; i < numOrdenes; i++) {
                     const precio = desde > hasta ? desde - (espaciado * i) : desde + (espaciado * i);
-                    resultado += `${i+1}. $${precio.toFixed(priceDecimals)} → ${cantidadesInteligentes[i].toFixed(6)}\n`;
+                    resultado += `${i + 1}. $${precio.toFixed(priceDecimals)} → ${cantidadesInteligentes[i].toFixed(6)}\n`;
                 }
             }
 
             document.getElementById('resultado').textContent = resultado;
-            
+
             // Guardar formato bot para escalada con decimales optimizados
             const lado = document.getElementById('tipo').value === 'LONG' ? 'BUY' : 'SELL';
             window.formatoParaBot = `SCALE ${simbolo.toUpperCase()}USDT ${lado} ${lotesEscalada.toFixed(6)} ${desdeFormateado}-${hastaFormateado} ${numOrdenes} SL:${stopFormateado}`;
-            
+
             showTab('result');
             alerta('success', '✅ Calculated');
         }
@@ -853,7 +964,7 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
 
             // Promedio y SL de SOLO la nueva operación
             let promedioNuevaOp, lotesNuevaOp;
-            
+
             if (tieneAdd && tieneScale) {
                 lotesNuevaOp = lotesAdd + lotesScale;
                 promedioNuevaOp = (lotesAdd * precioEntrada + lotesScale * promedioScale) / lotesNuevaOp;
@@ -931,7 +1042,7 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
         // Copiar al portapapeles
         function copiar() {
             let texto;
-            
+
             // Si hay formato bot guardado, dar opción
             if (window.formatoParaBot) {
                 const useBot = confirm("¿Copiar formato para bot?\nOK = Formato bot\nCancel = Formato pantalla");
@@ -939,15 +1050,15 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
             } else {
                 texto = document.getElementById('resultado').textContent;
             }
-            
+
             if (texto.includes('Setup data')) {
                 alerta('warning', '⚠️ Calculate first');
                 return;
             }
-            
-            navigator.clipboard.writeText(texto).then(function() {
+
+            navigator.clipboard.writeText(texto).then(function () {
                 alerta('success', '✅ Copied to clipboard');
-            }).catch(function() {
+            }).catch(function () {
                 // Método alternativo para navegadores antiguos
                 const textArea = document.createElement('textarea');
                 textArea.value = texto;
@@ -960,9 +1071,10 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
         }
 
         // Función mejorada para enviar a Telegram
+        // Función mejorada para enviar a Telegram
         async function enviarTelegram() {
             let textoBot;
-            
+
             // Si hay formato guardado para bot, usarlo
             if (window.formatoParaBot) {
                 textoBot = window.formatoParaBot;
@@ -979,16 +1091,16 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
 
             const btn = document.getElementById('btnTelegram');
             const originalText = btn.innerHTML;
-            
+
             // Mostrar loading
             btn.innerHTML = '<span class="loading"></span>Sending...';
             btn.disabled = true;
-            
+
             try {
                 const botToken = "7582987755:AAFBdNQFZ4McMsJwt60gvTs9CW2XkKZ3OMA";
                 const chatId = "7471012566";
                 const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-                
+
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -1001,7 +1113,7 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
                 });
 
                 const data = await response.json();
-                
+
                 if (data.ok) {
                     alerta('success', '✅ Enviado a Telegram correctamente');
                     // Limpiar formato guardado después de envío exitoso
@@ -1011,7 +1123,7 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
                 }
             } catch (error) {
                 console.error('Error:', error);
-                
+
                 // Método alternativo: Copiar y mostrar instrucción
                 try {
                     await navigator.clipboard.writeText(textoBot);
@@ -1029,12 +1141,163 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
             }
         }
 
+        // Función para obtener decimales de visualización por símbolo
+        function getDisplayDecimals(symbol) {
+            const sym = symbol.toLowerCase();
+
+            if (sym === 'btc') {
+                return { price: 2, lots: 3 };          // BTC: $98234.56, 0.123 lotes
+            } else if (['eth', 'sol', 'sui'].includes(sym)) {
+                return { price: 2, lots: 2 };          // ETH: $2431.73, 0.25 lotes
+            } else if (['1000bonk', '1000pepe', '1000floki', '1000sats'].includes(sym)) {
+                return { price: 6, lots: 0 };          // 1000PEPE: $0.012345, 1234 lotes
+            } else if (['kaito', 'wif', 'popcat', 'moodeng'].includes(sym)) {
+                return { price: 4, lots: 1 };          // KAITO: $1.2345, 123.4 lotes
+            } else if (['bnb', 'avax', 'dot', 'link', 'uni'].includes(sym)) {
+                return { price: 2, lots: 2 };          // BNB: $634.21, 0.45 lotes
+            } else {
+                return { price: 4, lots: 3 };          // General: $12.3456, 123.456 lotes
+            }
+        }
+
+        // Calcular Post-TP (Simple o Escalada)
+        function calcularPostTP() {
+            const simbolo = document.getElementById('simbolo').value || 'CRYPTO';
+            const lotesActuales = validateNumber(document.getElementById('lotes').value) || 0;
+            const promedioActual = validateNumber(document.getElementById('promedio').value) || 0;
+            const stopDeseado = validateNumber(document.getElementById('stop_post_tp').value);
+
+            if (!lotesActuales || !promedioActual || !stopDeseado) {
+                alerta('danger', '❌ Complete posición actual y stop deseado');
+                return;
+            }
+
+            // Detectar modo: Simple o Escalada
+            const precioSimple = validateNumber(document.getElementById('precio_post_tp').value);
+            const dineroSimple = validateNumber(document.getElementById('dinero_post_tp').value);
+
+            const desdeEscalada = validateNumber(document.getElementById('desde_post_tp').value);
+            const hastaEscalada = validateNumber(document.getElementById('hasta_post_tp').value);
+            const ordenesEscalada = parseInt(document.getElementById('ordenes_post_tp').value);
+            const dineroEscalada = validateNumber(document.getElementById('dinero_escalada_post_tp').value);
+
+            const tieneSimple = precioSimple && dineroSimple;
+            const tieneEscalada = desdeEscalada && hastaEscalada && ordenesEscalada && dineroEscalada;
+
+            if (!tieneSimple && !tieneEscalada) {
+                alerta('warning', '⚠️ Complete entrada simple O escalada');
+                return;
+            }
+
+            if (tieneSimple && tieneEscalada) {
+                alerta('warning', '⚠️ Use solo entrada simple O escalada, no ambas');
+                return;
+            }
+
+            let lotesNuevos, precioPromedio, dineroUsado, formatoBot;
+
+            if (tieneSimple) {
+                // MODO SIMPLE
+                const distancia = Math.abs(precioSimple - stopDeseado);
+                lotesNuevos = dineroSimple / distancia;
+                precioPromedio = precioSimple;
+                dineroUsado = dineroSimple;
+
+                // 🎯 OPTIMIZAR DECIMALES SEGÚN SÍMBOLO
+                const symbol = simbolo.toLowerCase();
+                let lots, priceDecimals;
+
+                if (symbol === 'btc') {
+                    lots = lotesNuevos.toFixed(3);
+                    priceDecimals = 2;
+                } else if (['eth', 'sol', 'bnb', 'avax', 'dot', 'link', 'uni'].includes(symbol)) {
+                    lots = lotesNuevos.toFixed(2);
+                    priceDecimals = 2;
+                } else if (['pepe', '1000pepe', 'shib', 'floki', '1000bonk', '1000sats'].includes(symbol)) {
+                    lots = Math.round(lotesNuevos).toString();
+                    priceDecimals = 6;
+                } else if (['kaito', 'wif', 'popcat', 'moodeng'].includes(symbol)) {
+                    lots = lotesNuevos.toFixed(1);
+                    priceDecimals = 4;
+                } else {
+                    lots = lotesNuevos.toFixed(3);
+                    priceDecimals = 4;
+                }
+
+                formatoBot = `BUY ${simbolo.toUpperCase()}USDT ${lots} ${precioSimple.toFixed(priceDecimals)} SL:${stopDeseado.toFixed(priceDecimals)}`;
+
+            } else {
+                // MODO ESCALADA
+                precioPromedio = (desdeEscalada + hastaEscalada) / 2;
+                const distancia = Math.abs(precioPromedio - stopDeseado);
+                lotesNuevos = dineroEscalada / distancia;
+                dineroUsado = dineroEscalada;
+
+                // 🎯 OPTIMIZAR DECIMALES PARA ESCALADA
+                const symbol = simbolo.toLowerCase();
+                let priceDecimals;
+
+                if (symbol === 'btc') {
+                    priceDecimals = 2;
+                } else if (['eth', 'sol', 'bnb', 'avax', 'dot', 'link', 'uni'].includes(symbol)) {
+                    priceDecimals = 2;
+                } else if (['pepe', '1000pepe', 'shib', 'floki', '1000bonk', '1000sats'].includes(symbol)) {
+                    priceDecimals = 6;
+                } else if (['kaito', 'wif', 'popcat', 'moodeng'].includes(symbol)) {
+                    priceDecimals = 4;
+                } else {
+                    priceDecimals = 4;
+                }
+
+                const lado = document.getElementById('tipo').value === 'LONG' ? 'BUY' : 'SELL';
+                formatoBot = `SCALE ${simbolo.toUpperCase()}USDT ${lado} ${lotesNuevos.toFixed(6)} ${desdeEscalada.toFixed(priceDecimals)}-${hastaEscalada.toFixed(priceDecimals)} ${ordenesEscalada} SL:${stopDeseado.toFixed(priceDecimals)}`;
+            }
+
+            // CALCULAR POSICIÓN FINAL
+            const lotesTotales = lotesActuales + lotesNuevos;
+            const promedioFinal = ((lotesActuales * promedioActual) + (lotesNuevos * precioPromedio)) / lotesTotales;
+            const perdidaReal = lotesTotales * Math.abs(promedioFinal - stopDeseado);
+
+            // RESULTADO CON DECIMALES OPTIMIZADOS
+            const displayDecimals = getDisplayDecimals(simbolo);
+
+            let modoTexto = tieneSimple ? 'SIMPLE' : 'ESCALADA';
+            let detalleEntrada = tieneSimple
+                ? `${lotesNuevos.toFixed(displayDecimals.lots)} lotes @ $${precioSimple.toFixed(displayDecimals.price)}`
+                : `${lotesNuevos.toFixed(displayDecimals.lots)} lotes escalados $${desdeEscalada.toFixed(displayDecimals.price)}-$${hastaEscalada.toFixed(displayDecimals.price)} (${ordenesEscalada} órdenes)`;
+
+            const resultado = `📈 POST-TP ${modoTexto}
+
+📊 POSICIÓN ORIGINAL:
+${lotesActuales.toFixed(displayDecimals.lots)} lotes @ $${promedioActual.toFixed(displayDecimals.price)}
+
+➕ AGREGAR POST-TP:
+${detalleEntrada}
+Dinero nuevo: $${dineroUsado.toFixed(2)}
+
+🎯 POSICIÓN FINAL:
+Total lotes: ${lotesTotales.toFixed(displayDecimals.lots)}
+Precio promedio: $${promedioFinal.toFixed(displayDecimals.price)}
+SL: $${stopDeseado.toFixed(displayDecimals.price)}
+Pérdida total: $${perdidaReal.toFixed(2)}
+
+✅ MODO POST-TP ${modoTexto}`;
+
+            document.getElementById('resultado').textContent = resultado;
+            window.formatoParaBot = formatoBot;
+
+            showTab('result');
+            alerta('success', `✅ Post-TP ${modoTexto} calculado`);
+        }
+
+        // Resetear todo
         // Resetear todo
         function resetearTodo() {
-            const campos = ['simbolo', 'riesgo', 'lotes', 'promedio', 'stop', 
-                           'precio_entrada', 'dinero_agregar', 'desde', 'hasta', 
-                           'ordenes', 'dinero_escalada'];
-            
+            const campos = ['simbolo', 'riesgo', 'lotes', 'promedio', 'stop',
+                'precio_entrada', 'dinero_agregar', 'desde', 'hasta',
+                'ordenes', 'dinero_escalada', 'precio_post_tp', 'dinero_post_tp', 'stop_post_tp',
+                'desde_post_tp', 'hasta_post_tp', 'ordenes_post_tp', 'dinero_escalada_post_tp'];
+
             campos.forEach(campo => {
                 const elemento = document.getElementById(campo);
                 if (elemento) elemento.value = '';
@@ -1048,7 +1311,7 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
             if (parseInput) parseInput.value = '';
 
             limpiarPresets();
-            
+
             // Resetear variables globales
             riesgoTotal = 0;
             riesgoUsado = 0;
@@ -1075,17 +1338,17 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
         // Sistema de alertas mejorado
         function alerta(tipo, mensaje) {
             const alertasContainer = document.getElementById('alertas');
-            
+
             // Limpiar alertas anteriores
             alertasContainer.innerHTML = '';
-            
+
             // Crear nueva alerta
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${tipo}`;
             alertDiv.textContent = mensaje;
-            
+
             alertasContainer.appendChild(alertDiv);
-            
+
             // Auto-remove después de 4 segundos (excepto errores)
             if (tipo !== 'danger') {
                 setTimeout(() => {
@@ -1103,21 +1366,21 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
         }
 
         // Event listeners y auto-update
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Campos que disparan auto-update
             const camposAuto = ['riesgo', 'lotes', 'promedio', 'stop'];
-            
+
             camposAuto.forEach(campoId => {
                 const campo = document.getElementById(campoId);
                 if (campo) {
                     // Auto-update con delay
-                    campo.addEventListener('input', function() {
+                    campo.addEventListener('input', function () {
                         clearTimeout(this.updateTimeout);
                         this.updateTimeout = setTimeout(() => {
                             actualizarStatus();
                         }, 500);
                     });
-                    
+
                     // Update inmediato al salir del campo
                     campo.addEventListener('blur', actualizarStatus);
                 }
@@ -1126,33 +1389,33 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
             // Validaciones en tiempo real - SIMPLIFICADAS
             const camposNumericos = document.querySelectorAll('input[type="number"]');
             camposNumericos.forEach(campo => {
-                campo.addEventListener('input', function() {
+                campo.addEventListener('input', function () {
                     // Solo validar cuando el usuario termine de escribir
                     // No interferir durante la escritura
                 });
-                
+
                 // Validar solo al salir del campo para no interferir
-                campo.addEventListener('blur', function() {
+                campo.addEventListener('blur', function () {
                     let valor = this.value;
-                    
+
                     // Limpiar caracteres no válidos
                     valor = valor.replace(/[^0-9.\-]/g, '');
-                    
+
                     // Permitir solo un punto decimal
                     const partes = valor.split('.');
                     if (partes.length > 2) {
                         valor = partes[0] + '.' + partes.slice(1).join('');
                     }
-                    
+
                     // Solo para campos que no permiten negativos
-                    const allowNegative = ['stop', 'promedio', 'actual', 'precio_entrada', 'desde', 'hasta'];
+                    const allowNegative = ['stop', 'promedio', 'actual', 'precio_entrada', 'desde', 'hasta', 'precio_post_tp', 'stop_post_tp', 'desde_post_tp', 'hasta_post_tp'];
                     if (!allowNegative.includes(this.id)) {
                         const num = parseFloat(valor);
                         if (num < 0) {
                             valor = Math.abs(num).toString();
                         }
                     }
-                    
+
                     this.value = valor;
                 });
             });
@@ -1168,7 +1431,7 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
                 });
                 try {
                     localStorage.setItem('tradingCalcData', JSON.stringify(data));
-                } catch(e) {
+                } catch (e) {
                     // Ignore localStorage errors
                 }
             };
@@ -1208,4 +1471,5 @@ Restante: $${formatNumber(riesgoDisponible - totalDineroOperacion, 0)}`;
         });
     </script>
 </body>
+
 </html>
